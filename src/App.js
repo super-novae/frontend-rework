@@ -1,10 +1,28 @@
-import { Container, Text } from "@chakra-ui/react";
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import { SuperUserLogin, SuperUserHome, SuperUserOrganization } from "./pages";
 
 function App() {
+  const [user, setUser] = useState();
   return (
-    <Container>
-      <Text>Remake</Text>
-    </Container>
+    <Router>
+      <Routes>
+        <Route path="superuser">
+          {user ? (
+            <Route index element={<SuperUserLogin />} />
+          ) : (
+            <>
+              <Route index element={<SuperUserHome />} />
+              <Route
+                path="organization/:id"
+                element={<SuperUserOrganization />}
+              />
+            </>
+          )}
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
