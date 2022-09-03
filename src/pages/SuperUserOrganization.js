@@ -1,10 +1,31 @@
-import { Container, Box, Heading, Button, Text } from "@chakra-ui/react";
-import { Sidebar, MobileHeader } from "../components";
-import { BsChevronLeft } from "react-icons/bs";
+import {
+  Container,
+  Box,
+  Heading,
+  Button,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { Sidebar, MobileHeader, EditOrganizationModal } from "../components";
+import { BsChevronLeft, BsPencil, BsThreeDotsVertical } from "react-icons/bs";
+
+const ElectionList = [
+  { id: "elec-he73901jsnv985lkmn216789fh4", name: "SRC Elections" },
+  { id: "elec-he73901jsnv985lkmn216789fh4", name: "SRC Elections" },
+  { id: "elec-he73901jsnv985lkmn216789fh4", name: "SRC Elections" },
+];
 
 export default function SuperUserOrganization() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Container maxW="100%" minH="100vh" p={0} display="flex">
+    <Container
+      maxW="100%"
+      minH="100vh"
+      p={0}
+      display="flex"
+      flexDir={{ base: "column", md: "row" }}
+    >
+      <EditOrganizationModal isOpen={isOpen} onClose={onClose} />
       <Sidebar />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
@@ -26,13 +47,73 @@ export default function SuperUserOrganization() {
             color="white"
             size="lg"
             fontWeight="normal"
-            gap={{ base: 0, md: 1 }}
+            gap={{ base: 0, md: 3 }}
+            onClick={onOpen}
           >
-            {/* <IoMdAdd color="white" size="1.2em" /> */}
+            <BsPencil />
             <Text display={{ base: "none", md: "inline" }}>EDIT ORG</Text>
           </Button>
+        </Box>
+        <Heading fontWeight="500" fontSize="1.3em" my={7}>
+          Kwame Nkrumah University of Science and Technology
+        </Heading>
+        <Heading fontWeight="400" fontSize="1.3em" mb={7}>
+          Administrator
+        </Heading>
+        <Box
+          display="flex"
+          borderWidth="2px"
+          borderColor="DarkPurple"
+          borderRadius={{ base: 5, md: 3 }}
+          p={4}
+          alignItems="center"
+        >
+          <Box display="flex" flexDir={{ base: "column", md: "row" }} flex={1}>
+            <Text flex={1} fontSize={{ base: "md", md: "xl" }}>
+              admin-f2uj68sh59jkl48anc4209klmc
+            </Text>
+            <Box
+              display="flex"
+              flex={2}
+              flexDir={{ base: "column", md: "row" }}
+            >
+              <Text flex={1} fontSize={{ base: "md", md: "xl" }}>
+                Nobel Fiawornu
+              </Text>
+              <Text flex={2} fontSize={{ base: "md", md: "xl" }}>
+                nobelfiawornu@gmail.com
+              </Text>
+            </Box>
+          </Box>
+          <BsThreeDotsVertical />
+        </Box>
+        <Heading fontWeight="400" fontSize="1.3em" my={7}>
+          Elections
+        </Heading>
+        <Box display="flex" flex={1} flexDir="column" gap={4}>
+          <Elections />
         </Box>
       </Box>
     </Container>
   );
+}
+
+function Elections() {
+  return ElectionList.map((election) => (
+    <Box
+      display="flex"
+      flexDir={{ base: "column", md: "row" }}
+      borderWidth="2px"
+      borderColor="DarkPurple"
+      borderRadius={{ base: 5, md: 3 }}
+      p={4}
+    >
+      <Text flex={1} fontSize={{ base: "md", md: "xl" }}>
+        {election.id}
+      </Text>
+      <Text flex={2} fontSize={{ base: "md", md: "xl" }}>
+        {election.name}
+      </Text>
+    </Box>
+  ));
 }

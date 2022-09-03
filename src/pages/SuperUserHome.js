@@ -5,8 +5,9 @@ import {
   Heading,
   Button,
   HStack,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { Sidebar, MobileHeader } from "../components";
+import { Sidebar, MobileHeader, CreateOrganizationModal } from "../components";
 import { IoMdAdd } from "react-icons/io";
 
 const OrgList = [
@@ -33,6 +34,7 @@ const OrgList = [
 ];
 
 export default function SuperUserHome() {
+  const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <Container
       maxW="100%"
@@ -41,6 +43,7 @@ export default function SuperUserHome() {
       display="flex"
       flexDir={{ base: "column", md: "row" }}
     >
+      <CreateOrganizationModal isOpen={isOpen} onClose={onClose} />
       <Sidebar />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
@@ -60,6 +63,7 @@ export default function SuperUserHome() {
             size="lg"
             fontWeight="normal"
             gap={{ base: 0, md: 1 }}
+            onClick={onOpen}
           >
             <IoMdAdd color="white" size="1.2em" />
             <Text display={{ base: "none", md: "inline" }}>CREATE ORG</Text>

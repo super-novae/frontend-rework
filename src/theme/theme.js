@@ -7,6 +7,10 @@ const theme = extendTheme({
     Cerise: "#DA4167",
     ShadowBlue: "#7A93AC",
   },
+  fonts: {
+    heading: "Quicksand",
+    body: "Quicksand",
+  },
 });
 
 export default theme;
