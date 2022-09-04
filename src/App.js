@@ -1,7 +1,17 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { SuperUserLogin, SuperUserHome, SuperUserOrganization } from "./pages";
+import {
+  SuperUserLogin,
+  SuperUserHome,
+  SuperUserOrganization,
+  AdminLogin,
+  AdminHome,
+  AdminElection,
+  AdminElectionOffices,
+  AdminElectionOffice,
+  AdminVoter,
+} from "./pages";
 
 function App() {
   const [user, setUser] = useState();
@@ -18,6 +28,25 @@ function App() {
                 <Route
                   path="organization/:id"
                   element={<SuperUserOrganization />}
+                />
+              </>
+            )}
+          </Route>
+          <Route path="admin">
+            {user ? (
+              <Route index element={<AdminLogin />} />
+            ) : (
+              <>
+                <Route index element={<AdminHome />} />
+                <Route path="elections" element={<AdminElection />} />
+                <Route path="voters" element={<AdminVoter />} />
+                <Route
+                  path="elections/offices"
+                  element={<AdminElectionOffices />}
+                />
+                <Route
+                  path="elections/offices/:id"
+                  element={<AdminElectionOffice />}
                 />
               </>
             )}

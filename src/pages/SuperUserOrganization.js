@@ -6,7 +6,12 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Sidebar, MobileHeader, EditOrganizationModal } from "../components";
+import {
+  Sidebar,
+  MobileHeader,
+  EditOrganizationModal,
+  ListView,
+} from "../components";
 import { BsChevronLeft, BsPencil, BsThreeDotsVertical } from "react-icons/bs";
 
 const ElectionList = [
@@ -62,7 +67,7 @@ export default function SuperUserOrganization() {
         </Heading>
         <Box
           display="flex"
-          borderWidth="2px"
+          borderWidth={1}
           borderColor="DarkPurple"
           borderRadius={{ base: 5, md: 3 }}
           p={4}
@@ -91,29 +96,9 @@ export default function SuperUserOrganization() {
           Elections
         </Heading>
         <Box display="flex" flex={1} flexDir="column" gap={4}>
-          <Elections />
+          <ListView listItem={ElectionList} />
         </Box>
       </Box>
     </Container>
   );
-}
-
-function Elections() {
-  return ElectionList.map((election) => (
-    <Box
-      display="flex"
-      flexDir={{ base: "column", md: "row" }}
-      borderWidth="2px"
-      borderColor="DarkPurple"
-      borderRadius={{ base: 5, md: 3 }}
-      p={4}
-    >
-      <Text flex={1} fontSize={{ base: "md", md: "xl" }}>
-        {election.id}
-      </Text>
-      <Text flex={2} fontSize={{ base: "md", md: "xl" }}>
-        {election.name}
-      </Text>
-    </Box>
-  ));
 }

@@ -10,35 +10,31 @@ import {
 import {
   Sidebar,
   MobileHeader,
-  CreateOrganizationModal,
+  CreateElectionModal,
   ListView,
 } from "../components";
-import { IoMdAdd } from "react-icons/io";
+import { BsPlus } from "react-icons/bs";
 
-const OrgList = [
+const ElectionList = [
   {
     id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Kwame Nkrumah University of Science and Technology",
+    name: "SRC ELECTION",
   },
   {
     id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Kwame Nkrumah University of Science and Technology",
+    name: "ACES ELECTION",
   },
   {
     id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Kwame Nkrumah University of Science and Technology",
+    name: "ACES ELECTION",
   },
   {
     id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Kwame Nkrumah University of Science and Technology",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Kwame Nkrumah University of Science and Technology",
+    name: "GADRES ELECTION",
   },
 ];
 
-export default function SuperUserHome() {
+export default function AdminElection() {
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <Container
@@ -48,7 +44,7 @@ export default function SuperUserHome() {
       display="flex"
       flexDir={{ base: "column", md: "row" }}
     >
-      <CreateOrganizationModal isOpen={isOpen} onClose={onClose} />
+      <CreateElectionModal isOpen={isOpen} onClose={onClose} />
       <Sidebar />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
@@ -60,7 +56,7 @@ export default function SuperUserHome() {
           pb={7}
         >
           <Heading fontWeight="semibold" fontSize="3xl">
-            SuperUser
+            Administrator
           </Heading>
           <Button
             bgColor="DarkPurple"
@@ -70,13 +66,15 @@ export default function SuperUserHome() {
             gap={{ base: 0, md: 1 }}
             onClick={onOpen}
           >
-            <IoMdAdd color="white" size="1.2em" />
-            <Text display={{ base: "none", md: "inline" }}>CREATE ORG</Text>
+            <BsPlus color="white" size="1.2em" />
+            <Text display={{ base: "none", md: "inline" }}>
+              CREATE ELECTION
+            </Text>
           </Button>
         </Box>
         <Box display="flex" flex={1} flexDir="column">
           <Heading fontWeight="500" fontSize="2xl" mt={10} mb={12}>
-            Organizations
+            Elections
           </Heading>
           <HStack px={4} mb={5} display={{ base: "none", md: "flex" }}>
             <Text flex={1} fontSize="xl">
@@ -87,7 +85,7 @@ export default function SuperUserHome() {
             </Text>
           </HStack>
           <Box display="flex" flexDir="column" flex={1} gap={6}>
-            <ListView listItem={OrgList} />
+            <ListView listItem={ElectionList} />
           </Box>
         </Box>
       </Box>
