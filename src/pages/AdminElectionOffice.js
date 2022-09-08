@@ -53,7 +53,7 @@ export default function AdminElectionOffice() {
       flexDir={{ base: "column", md: "row" }}
     >
       <CreateCandidateModal isOpen={isOpen} onClose={onClose} />
-      <Sidebar />
+      <Sidebar color="DarkPurple" />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box

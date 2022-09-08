@@ -49,7 +49,7 @@ export default function SuperUserHome() {
       flexDir={{ base: "column", md: "row" }}
     >
       <CreateOrganizationModal isOpen={isOpen} onClose={onClose} />
-      <Sidebar />
+      <Sidebar color="DarkPurple" />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
@@ -87,7 +87,7 @@ export default function SuperUserHome() {
             </Text>
           </HStack>
           <Box display="flex" flexDir="column" flex={1} gap={6}>
-            <ListView listItem={OrgList} />
+            <ListView listItem={OrgList} navigateTo="organization" />
           </Box>
         </Box>
       </Box>

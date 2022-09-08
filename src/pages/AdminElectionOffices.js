@@ -53,7 +53,7 @@ export default function AdminElectionOffices() {
       flexDir={{ base: "column", md: "row" }}
     >
       <EditOfficeModal isOpen={isOpen} onClose={onClose} />
-      <Sidebar />
+      <Sidebar color="DarkPurple" />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
@@ -111,7 +111,10 @@ export default function AdminElectionOffices() {
             </Text>
           </HStack>
           <Box display="flex" flexDir="column" flex={1} gap={6}>
-            <ListView listItem={OfficeList} />
+            <ListView
+              listItem={OfficeList}
+              navigateTo="/admin/elections/offices"
+            />
           </Box>
         </Box>
       </Box>

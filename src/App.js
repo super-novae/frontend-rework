@@ -11,6 +11,10 @@ import {
   AdminElectionOffices,
   AdminElectionOffice,
   AdminVoter,
+  VoterLogin,
+  VoterForgotPassword,
+  VoterHome,
+  VotingScreen,
 } from "./pages";
 
 function App() {
@@ -41,13 +45,29 @@ function App() {
                 <Route path="elections" element={<AdminElection />} />
                 <Route path="voters" element={<AdminVoter />} />
                 <Route
-                  path="elections/offices"
+                  path="elections/:id"
                   element={<AdminElectionOffices />}
                 />
                 <Route
                   path="elections/offices/:id"
                   element={<AdminElectionOffice />}
                 />
+              </>
+            )}
+          </Route>
+          <Route path="voter">
+            {user ? (
+              <>
+                <Route index element={<VoterLogin />} />
+                <Route
+                  path="forgot-password"
+                  element={<VoterForgotPassword />}
+                />
+              </>
+            ) : (
+              <>
+                <Route index element={<VoterHome />} />
+                <Route path="voting" element={<VotingScreen />} />
               </>
             )}
           </Route>

@@ -1,7 +1,10 @@
 import { Container, Box, Heading } from "@chakra-ui/react";
 import { Sidebar, MobileHeader } from "../components";
+import { useNavigate } from "react-router-dom";
 
 export default function SuperUserHome() {
+  const navigate = useNavigate();
+
   return (
     <Container
       maxW="100%"
@@ -10,7 +13,7 @@ export default function SuperUserHome() {
       display="flex"
       flexDir={{ base: "column", md: "row" }}
     >
-      <Sidebar />
+      <Sidebar color="DarkPurple" />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
@@ -37,6 +40,12 @@ export default function SuperUserHome() {
             borderRadius={5}
             p="20"
             boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+            _hover={{
+              cursor: "pointer",
+              bgColor: "DarkPurple",
+              color: "Cerise",
+            }}
+            onClick={() => navigate("elections")}
           >
             <Heading>Election</Heading>
           </Box>
@@ -46,9 +55,14 @@ export default function SuperUserHome() {
             py="80px"
             px="89px"
             boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
-            bgColor="DarkPurple"
+            _hover={{
+              cursor: "pointer",
+              bgColor: "DarkPurple",
+              color: "Cerise",
+            }}
+            onClick={() => navigate("voters")}
           >
-            <Heading color="Cerise">Voters</Heading>
+            <Heading>Voters</Heading>
           </Box>
         </Box>
       </Box>

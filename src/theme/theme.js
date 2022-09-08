@@ -6,6 +6,7 @@ const theme = extendTheme({
     CameoPink: "#F0BCD4",
     Cerise: "#DA4167",
     ShadowBlue: "#7A93AC",
+    CelticBlue: "#226CE0",
   },
   fonts: {
     heading: "Quicksand",

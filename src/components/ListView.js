@@ -1,6 +1,9 @@
 import { Box, Text } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
-export default function ListView({ listItem }) {
+export default function ListView({ listItem, navigateTo }) {
+  const navigate = useNavigate();
+
   return listItem.map((item) => (
     <Box
       display="flex"
@@ -13,6 +16,9 @@ export default function ListView({ listItem }) {
         cursor: "pointer",
         borderWidth: 2,
       }}
+      onClick={() =>
+        navigate(navigateTo ? `${navigateTo}/${item.id}` : `${item.id}`)
+      }
     >
       <Text flex={1} fontSize={{ base: "md", md: "xl" }}>
         {item.id}

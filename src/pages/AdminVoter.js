@@ -48,7 +48,7 @@ export default function AdminVoter() {
       flexDir={{ base: "column", md: "row" }}
     >
       <CreateVoterModal isOpen={isOpen} onClose={onClose} />
-      <Sidebar />
+      <Sidebar color="DarkPurple" />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box

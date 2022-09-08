@@ -1,12 +1,12 @@
 import { Box } from "@chakra-ui/react";
 import { BsBoxArrowLeft } from "react-icons/bs";
 
-export default function Sidebar() {
+export default function Sidebar({ color }) {
   return (
     <Box
       display={{ base: "none", md: "flex" }}
       flexDir="column"
-      bgColor="DarkPurple"
+      bgColor={color}
       minW={20}
       py={5}
     >

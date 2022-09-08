@@ -7,3 +7,7 @@ export { default as AdminElection } from "./AdminElection";
 export { default as AdminElectionOffices } from "./AdminElectionOffices";
 export { default as AdminElectionOffice } from "./AdminElectionOffice";
 export { default as AdminVoter } from "./AdminVoter";
+export { default as VoterLogin } from "./VoterLogin";
+export { default as VoterForgotPassword } from "./VoterForgotPassword";
+export { default as VoterHome } from "./VoterHome";
+export { default as VotingScreen } from "./VotingScreen";

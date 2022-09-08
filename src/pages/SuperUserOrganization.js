@@ -12,6 +12,7 @@ import {
   EditOrganizationModal,
   ListView,
 } from "../components";
+import { useNavigate } from "react-router-dom";
 import { BsChevronLeft, BsPencil, BsThreeDotsVertical } from "react-icons/bs";
 
 const ElectionList = [
@@ -22,6 +23,7 @@ const ElectionList = [
 
 export default function SuperUserOrganization() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
   return (
     <Container
       maxW="100%"
@@ -31,7 +33,7 @@ export default function SuperUserOrganization() {
       flexDir={{ base: "column", md: "row" }}
     >
       <EditOrganizationModal isOpen={isOpen} onClose={onClose} />
-      <Sidebar />
+      <Sidebar color="DarkPurple" />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
@@ -42,7 +44,13 @@ export default function SuperUserOrganization() {
           pb={7}
         >
           <Box display="flex" alignItems="center" gap={3}>
-            <BsChevronLeft color="black" size="1.3em" />
+            <Box _hover={{ cursor: "pointer" }}>
+              <BsChevronLeft
+                color="black"
+                size="1.3em"
+                onClick={() => navigate("/superuser")}
+              />
+            </Box>
             <Heading fontWeight="semibold" fontSize="3xl">
               SuperUser
             </Heading>
