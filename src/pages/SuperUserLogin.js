@@ -51,13 +51,12 @@ function LoginForm({ loginHandler }) {
     return true;
   };
 
-  const onLoginClick = async () => {
+  const onLoginClick = () => {
+    setLoading(true);
     const shouldLogin = validateLoginInput();
     if (shouldLogin) {
-      setLoading(true);
       loginHandler(username, password);
     }
-    setLoading(false);
   };
 
   return (
