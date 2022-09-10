@@ -38,8 +38,9 @@ const OrgList = [
   },
 ];
 
-export default function SuperUserHome() {
+export default function SuperUserHome({ logout }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
+
   return (
     <Container
       maxW="100%"
@@ -49,7 +50,7 @@ export default function SuperUserHome() {
       flexDir={{ base: "column", md: "row" }}
     >
       <CreateOrganizationModal isOpen={isOpen} onClose={onClose} />
-      <Sidebar color="DarkPurple" />
+      <Sidebar color="DarkPurple" logout={logout} />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box

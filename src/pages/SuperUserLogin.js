@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Container,
   Box,
@@ -6,15 +7,17 @@ import {
   Text,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Input,
   Flex,
+  CircularProgress,
 } from "@chakra-ui/react";
 
-export default function SuperUserLogin() {
+export default function SuperUserLogin({ loginHandler }) {
   return (
     <Container maxW="100%" h="100vh" p={0}>
       <Flex h="full" display="flex" flex={1} flexDir={{ base: "row" }}>
-        <LoginForm />
+        <LoginForm loginHandler={loginHandler} />
         <Box
           display={{ base: "none", md: "flex" }}
           flex={1}
@@ -26,7 +29,37 @@ export default function SuperUserLogin() {
   );
 }
 
-function LoginForm() {
+function LoginForm({ loginHandler }) {
+  const [username, setUsername] = useState("");
+  const [usernameError, setUsernameError] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const validateLoginInput = () => {
+    setPasswordError(false);
+    setUsernameError(false);
+    if (username === "") {
+      setUsernameError(true);
+      return false;
+    }
+    if (password === "") {
+      setPasswordError(true);
+      return false;
+    }
+
+    return true;
+  };
+
+  const onLoginClick = async () => {
+    const shouldLogin = validateLoginInput();
+    if (shouldLogin) {
+      setLoading(true);
+      loginHandler(username, password);
+    }
+    setLoading(false);
+  };
+
   return (
     <Box
       display="flex"
@@ -51,15 +84,26 @@ function LoginForm() {
           </Box>
           <Text color="#7D7D7D">Enter your login credentials</Text>
         </Box>
-        <FormControl mb={{ base: 5, md: 3 }}>
+        <FormControl mb={{ base: 5, md: 3 }} isInvalid={usernameError}>
           <FormLabel>Username</FormLabel>
-          <Input />
+          <Input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <FormErrorMessage>Username is required</FormErrorMessage>
         </FormControl>
-        <FormControl>
+        <FormControl isInvalid={passwordError}>
           <FormLabel>Password</FormLabel>
-          <Input />
+          <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <FormErrorMessage>Password is required</FormErrorMessage>
         </FormControl>
-        <Button w="full" bgColor="CameoPink" mt={10}>
+        <Button w="full" bgColor="CameoPink" mt={10} onClick={onLoginClick}>
+          {loading && (
+            <CircularProgress isIndeterminate color="black" size="5" mr="3" />
+          )}
           LOGIN
         </Button>
       </Box>

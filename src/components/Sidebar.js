@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { BsBoxArrowLeft } from "react-icons/bs";
 
-export default function Sidebar({ color }) {
+export default function Sidebar({ color, logout }) {
   return (
     <Box
       display={{ base: "none", md: "flex" }}
@@ -11,7 +11,7 @@ export default function Sidebar({ color }) {
       py={5}
     >
       <Box display="flex" flex={1}></Box>
-      <Box display="flex" alignSelf="center">
+      <Box display="flex" alignSelf="center" onClick={() => logout()}>
         <BsBoxArrowLeft color="white" size="3em" />
       </Box>
     </Box>
