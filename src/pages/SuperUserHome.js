@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Container,
   Text,
@@ -15,31 +16,39 @@ import {
 } from "../components";
 import { IoMdAdd } from "react-icons/io";
 
-const OrgList = [
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Kwame Nkrumah University of Science and Technology",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Kwame Nkrumah University of Science and Technology",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Kwame Nkrumah University of Science and Technology",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Kwame Nkrumah University of Science and Technology",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Kwame Nkrumah University of Science and Technology",
-  },
-];
+import {
+  getAllOrganizations,
+  deleteOrganizationById,
+} from "../api/organization/organization-api";
 
 export default function SuperUserHome({ logout }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const [orgList, setOrgList] = useState(null);
+
+  async function fetchOrganizations(token) {
+    const organizations = await getAllOrganizations(token);
+    if (organizations) {
+      setOrgList(organizations);
+    }
+  }
+
+  useEffect(() => {
+    const super_user_token = localStorage.getItem(
+      process.env.REACT_APP_SUPER_USER_LS_KEY.toString()
+    );
+    if (super_user_token) {
+      fetchOrganizations(super_user_token);
+    }
+  }, []);
+
+  const deleteOrganizationHandler = (id) => {
+    const super_user_token = localStorage.getItem(
+      process.env.REACT_APP_SUPER_USER_LS_KEY.toString()
+    );
+    deleteOrganizationById(super_user_token, id);
+    fetchOrganizations(super_user_token);
+  };
 
   return (
     <Container
@@ -79,16 +88,22 @@ export default function SuperUserHome({ logout }) {
           <Heading fontWeight="500" fontSize="2xl" mt={10} mb={12}>
             Organizations
           </Heading>
-          <HStack px={4} mb={5} display={{ base: "none", md: "flex" }}>
-            <Text flex={1} fontSize="xl">
-              ID
-            </Text>
-            <Text flex={2} fontSize="xl">
-              Name
-            </Text>
-          </HStack>
+          {orgList !== null && (
+            <HStack px={4} mb={5} display={{ base: "none", md: "flex" }}>
+              <Text flex={1} fontSize="xl">
+                ID
+              </Text>
+              <Text flex={2} fontSize="xl">
+                Name
+              </Text>
+            </HStack>
+          )}
           <Box display="flex" flexDir="column" flex={1} gap={6}>
-            <ListView listItem={OrgList} navigateTo="organization" />
+            <ListView
+              listItem={orgList}
+              navigateTo="organization"
+              deleteFunc={deleteOrganizationHandler}
+            />
           </Box>
         </Box>
       </Box>

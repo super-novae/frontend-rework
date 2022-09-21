@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Container,
   Box,
@@ -10,20 +11,63 @@ import {
   Sidebar,
   MobileHeader,
   EditOrganizationModal,
+  AddAdminToOrganizationModal,
   ListView,
 } from "../components";
-import { useNavigate } from "react-router-dom";
-import { BsChevronLeft, BsPencil, BsThreeDotsVertical } from "react-icons/bs";
+import { useNavigate, useParams } from "react-router-dom";
+import { BsChevronLeft, BsPencil, BsPlusLg, BsTrashFill } from "react-icons/bs";
+
+import { getOrganizationById } from "../api/organization/organization-api";
+import { getAdministratorById, deleteAdminById } from "../api/auth/admin";
 
 const ElectionList = [
   { id: "elec-he73901jsnv985lkmn216789fh4", name: "SRC Elections" },
-  { id: "elec-he73901jsnv985lkmn216789fh4", name: "SRC Elections" },
-  { id: "elec-he73901jsnv985lkmn216789fh4", name: "SRC Elections" },
 ];
 
-export default function SuperUserOrganization() {
+export default function SuperUserOrganization({ logout }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: newIsOpen,
+    onOpen: newOnOpen,
+    onClose: newOnClose,
+  } = useDisclosure();
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [orgDetails, setOrgDetails] = useState(null);
+  const [admin, setAdmin] = useState(null);
+  // const [electionList, setElectionList] = useState(null);
+
+  useEffect(() => {
+    const super_user_token = localStorage.getItem(
+      process.env.REACT_APP_SUPER_USER_LS_KEY.toString()
+    );
+
+    async function getAdminByIdHandler(id) {
+      const admin = await getAdministratorById(super_user_token, id);
+      if (admin) {
+        setAdmin(admin);
+      }
+    }
+
+    async function getOrgByIdHandler(id) {
+      const org = await getOrganizationById(super_user_token, id);
+      setOrgDetails(org);
+      if (org.administrator_id) {
+        getAdminByIdHandler(org.administrator_id);
+      }
+    }
+
+    getOrgByIdHandler(id);
+  }, []);
+
+  const deleteAdminHandler = async () => {
+    const super_user_token = localStorage.getItem(
+      process.env.REACT_APP_SUPER_USER_LS_KEY.toString()
+    );
+    await deleteAdminById(super_user_token, admin.id);
+  };
+
   return (
     <Container
       maxW="100%"
@@ -32,8 +76,14 @@ export default function SuperUserOrganization() {
       display="flex"
       flexDir={{ base: "column", md: "row" }}
     >
-      <EditOrganizationModal isOpen={isOpen} onClose={onClose} />
-      <Sidebar color="DarkPurple" />
+      <AddAdminToOrganizationModal
+        isOpen={isOpen}
+        onClose={onClose}
+        setAdmin={setAdmin}
+        orgId={id}
+      />
+      <EditOrganizationModal isOpen={newIsOpen} onClose={newOnClose} />
+      <Sidebar color="DarkPurple" logout={logout} />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
@@ -55,51 +105,79 @@ export default function SuperUserOrganization() {
               SuperUser
             </Heading>
           </Box>
-          <Button
-            bgColor="DarkPurple"
-            color="white"
-            size="lg"
-            fontWeight="normal"
-            gap={{ base: 0, md: 3 }}
-            onClick={onOpen}
-          >
-            <BsPencil />
-            <Text display={{ base: "none", md: "inline" }}>EDIT ORG</Text>
-          </Button>
+          <Box display="flex" gap={3}>
+            <Button
+              bgColor="DarkPurple"
+              color="white"
+              size="lg"
+              fontWeight="normal"
+              gap={{ base: 0, md: 3 }}
+              onClick={() => onOpen()}
+              alignItems="center"
+            >
+              <BsPlusLg size="16" />
+              <Text display={{ base: "none", md: "inline" }}>ADD ADMIN</Text>
+            </Button>
+            <Button
+              bgColor="DarkPurple"
+              color="white"
+              size="lg"
+              fontWeight="normal"
+              gap={{ base: 0, md: 3 }}
+              onClick={() => newOnOpen()}
+            >
+              <BsPencil />
+              <Text display={{ base: "none", md: "inline" }}>EDIT ORG</Text>
+            </Button>
+          </Box>
         </Box>
         <Heading fontWeight="500" fontSize="1.3em" my={7}>
-          Kwame Nkrumah University of Science and Technology
+          {orgDetails?.name}
         </Heading>
         <Heading fontWeight="400" fontSize="1.3em" mb={7}>
           Administrator
         </Heading>
-        <Box
-          display="flex"
-          borderWidth={1}
-          borderColor="DarkPurple"
-          borderRadius={{ base: 5, md: 3 }}
-          p={4}
-          alignItems="center"
-        >
-          <Box display="flex" flexDir={{ base: "column", md: "row" }} flex={1}>
-            <Text flex={1} fontSize={{ base: "md", md: "xl" }}>
-              admin-f2uj68sh59jkl48anc4209klmc
-            </Text>
+        {admin ? (
+          <Box
+            display="flex"
+            borderWidth={1}
+            borderColor="DarkPurple"
+            borderRadius={{ base: 5, md: 3 }}
+            p={4}
+            alignItems="center"
+          >
             <Box
               display="flex"
-              flex={2}
               flexDir={{ base: "column", md: "row" }}
+              flex={1}
             >
               <Text flex={1} fontSize={{ base: "md", md: "xl" }}>
-                Nobel Fiawornu
+                {admin?.id}
               </Text>
-              <Text flex={2} fontSize={{ base: "md", md: "xl" }}>
-                nobelfiawornu@gmail.com
-              </Text>
+              <Box
+                display="flex"
+                flex={2}
+                flexDir={{ base: "column", md: "row" }}
+              >
+                <Text flex={1} fontSize={{ base: "md", md: "xl" }}>
+                  {admin?.name}
+                </Text>
+                <Text flex={2} fontSize={{ base: "md", md: "xl" }}>
+                  {admin?.email}
+                </Text>
+              </Box>
             </Box>
+            <BsTrashFill
+              color="red"
+              size="18"
+              onClick={() => deleteAdminHandler()}
+            />
           </Box>
-          <BsThreeDotsVertical />
-        </Box>
+        ) : (
+          <Box>
+            <Text>Nothing to show here</Text>
+          </Box>
+        )}
         <Heading fontWeight="400" fontSize="1.3em" my={7}>
           Elections
         </Heading>

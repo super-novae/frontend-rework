@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { SuperUserLogin, SuperUserHome, SuperUserOrganization } from "../pages";
 import { superuser_login } from "../api/auth/superuser";
 
 export default function SuperUserRoutes() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const super_user_token = localStorage.getItem(
@@ -14,7 +15,7 @@ export default function SuperUserRoutes() {
     if (super_user_token) {
       setUser(super_user_token);
     } else {
-      setUser();
+      setUser(null);
     }
   }, []);
 
@@ -34,7 +35,8 @@ export default function SuperUserRoutes() {
       localStorage.removeItem(
         process.env.REACT_APP_SUPER_USER_LS_KEY.toString()
       );
-      setUser();
+      setUser(null);
+      navigate("/superuser");
     } catch (err) {
       console.log(err);
     }
@@ -53,7 +55,7 @@ export default function SuperUserRoutes() {
             <Route index element={<SuperUserHome logout={logout} />} />
             <Route
               path="organization/:id"
-              element={<SuperUserOrganization />}
+              element={<SuperUserOrganization logout={logout} />}
             />
           </>
         )}
