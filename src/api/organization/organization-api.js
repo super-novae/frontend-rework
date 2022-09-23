@@ -62,12 +62,23 @@ export const deleteOrganizationById = async (token, id) => {
   }
 };
 
-// export const updateOrganizationById = async () => {
-//   try {
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+export const updateOrganizationById = async (token, id, name) => {
+  const update_org_url = `${process.env.REACT_APP_BASE_ENDPOINT.toString()}/api/v1/organization/${id}`;
+  try {
+    const response = await axios.put(
+      update_org_url,
+      { name },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("UpdateOrganizationById: ", response.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const addAdminToOrganization = async (
   token,

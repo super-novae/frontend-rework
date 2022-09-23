@@ -98,6 +98,7 @@ function LoginForm({ loginHandler }) {
           <Input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            type="password"
           />
           <FormErrorMessage>Password is required</FormErrorMessage>
         </FormControl>

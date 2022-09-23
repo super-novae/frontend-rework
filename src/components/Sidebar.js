@@ -11,7 +11,7 @@ export default function Sidebar({ color, logout }) {
       py={5}
     >
       <Box display="flex" flex={1}></Box>
-      <Box display="flex" alignSelf="center" onClick={() => logout()}>
+      <Box _hover={{cursor: "pointer"}} display="flex" alignSelf="center" onClick={() => logout()}>
         <BsBoxArrowLeft color="white" size="3em" />
       </Box>
     </Box>
