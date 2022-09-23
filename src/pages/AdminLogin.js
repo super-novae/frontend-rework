@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Container,
   Box,
@@ -8,13 +9,14 @@ import {
   FormLabel,
   Input,
   Flex,
+  CircularProgress,
 } from "@chakra-ui/react";
 
-export default function AdminLogin() {
+export default function AdminLogin({ login }) {
   return (
     <Container maxW="100%" h="100vh" p={0}>
       <Flex h="full" display="flex" flex={1} flexDir={{ base: "row" }}>
-        <LoginForm />
+        <LoginForm login={login} />
         <Box
           display={{ base: "none", md: "flex" }}
           flex={1}
@@ -26,7 +28,16 @@ export default function AdminLogin() {
   );
 }
 
-function LoginForm() {
+function LoginForm({ login }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const loginEvent = () => {
+    setLoading(true);
+    login(email, password);
+  };
+
   return (
     <Box
       display="flex"
@@ -53,13 +64,19 @@ function LoginForm() {
         </Box>
         <FormControl mb={{ base: 5, md: 3 }}>
           <FormLabel>Email</FormLabel>
-          <Input />
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
         </FormControl>
         <FormControl>
           <FormLabel>Password</FormLabel>
-          <Input />
+          <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </FormControl>
-        <Button w="full" bgColor="CameoPink" mt={10}>
+        <Button w="full" bgColor="CameoPink" mt={10} onClick={loginEvent}>
+          {loading && (
+            <CircularProgress isIndeterminate color="black" size="5" mr="3" />
+          )}
           LOGIN
         </Button>
       </Box>

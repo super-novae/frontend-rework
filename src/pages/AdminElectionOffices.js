@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Container,
   Text,
@@ -15,35 +16,61 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  FormLabel,
 } from "@chakra-ui/react";
 import { Sidebar, MobileHeader, ListView } from "../components";
 import { BsPlus } from "react-icons/bs";
+import { useParams } from "react-router-dom";
 
-const OfficeList = [
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "President",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Vice President",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Financial Secretary",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "WOCOM",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "Events Coordinator",
-  },
-];
+import {
+  getElectionOffices,
+  createElectionOffice,
+  deleteElectionOffice,
+} from "../api/election/election-api";
+import { getLocalStorage } from "../util/local-storage.util";
 
-export default function AdminElectionOffices() {
+export default function AdminElectionOffices({ logout }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const { id } = useParams();
+
+  const [officeList, setOfficeList] = useState([]);
+
+  useEffect(() => {
+    async function fetchAllOffices() {
+      const json_admin = getLocalStorage("ADMIN");
+      const adminObj = JSON.parse(json_admin);
+
+      const officeList = await getElectionOffices(adminObj.token, id);
+      if (officeList) {
+        setOfficeList(officeList);
+      }
+    }
+
+    fetchAllOffices();
+  }, []);
+
+  const createOfficeHandler = async (body) => {
+    const json_admin = getLocalStorage("ADMIN");
+    const adminObj = JSON.parse(json_admin);
+
+    body = { ...body, election_id: id };
+
+    const newOffice = await createElectionOffice(adminObj.token, id, body);
+    if (newOffice) {
+      setOfficeList((prev) => [...prev, newOffice]);
+    }
+  };
+
+  const deleteOfficeHandler = async (officeId) => {
+    const json_admin = getLocalStorage("ADMIN");
+    const adminObj = JSON.parse(json_admin);
+
+    const response = await deleteElectionOffice(adminObj.token, id, officeId);
+    if (response) {
+      setOfficeList((prev) => prev.filter((office) => office.id !== officeId));
+    }
+  };
+
   return (
     <Container
       maxW="100%"
@@ -52,8 +79,12 @@ export default function AdminElectionOffices() {
       display="flex"
       flexDir={{ base: "column", md: "row" }}
     >
-      <EditOfficeModal isOpen={isOpen} onClose={onClose} />
-      <Sidebar color="DarkPurple" />
+      <EditOfficeModal
+        isOpen={isOpen}
+        onClose={onClose}
+        createOfficeHandler={createOfficeHandler}
+      />
+      <Sidebar color="DarkPurple" logout={logout} />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
@@ -102,18 +133,21 @@ export default function AdminElectionOffices() {
           <Heading fontWeight="400" fontSize="2xl" my={5}>
             Offices
           </Heading>
-          <HStack px={4} mb={5} display={{ base: "none", md: "flex" }}>
-            <Text flex={1} fontSize="xl">
-              ID
-            </Text>
-            <Text flex={2} fontSize="xl">
-              Name
-            </Text>
-          </HStack>
+          {officeList.length !== 0 && (
+            <HStack px={4} mb={5} display={{ base: "none", md: "flex" }}>
+              <Text flex={1} fontSize="xl">
+                ID
+              </Text>
+              <Text flex={2} fontSize="xl">
+                Name
+              </Text>
+            </HStack>
+          )}
           <Box display="flex" flexDir="column" flex={1} gap={6}>
             <ListView
-              listItem={OfficeList}
-              navigateTo="/admin/elections/offices"
+              listItem={officeList}
+              navigateTo={`/admin/elections/${id}/offices`}
+              deleteFunc={deleteOfficeHandler}
             />
           </Box>
         </Box>
@@ -122,7 +156,16 @@ export default function AdminElectionOffices() {
   );
 }
 
-function EditOfficeModal({ isOpen, onClose }) {
+function EditOfficeModal({ isOpen, onClose, createOfficeHandler }) {
+  const [name, setName] = useState("");
+  const [routeName, setRouteName] = useState("");
+
+  const createOffice = () => {
+    const data = { name, route_name: routeName };
+    createOfficeHandler(data);
+    onClose();
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -132,18 +175,26 @@ function EditOfficeModal({ isOpen, onClose }) {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create Election</ModalHeader>
+        <ModalHeader>Create Election Office</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
+          <FormControl mb={3}>
+            <FormLabel>Name</FormLabel>
+            <Input value={name} onChange={(e) => setName(e.target.value)} />
+          </FormControl>
           <FormControl>
-            <Input />
+            <FormLabel>Route Name</FormLabel>
+            <Input
+              value={routeName}
+              onChange={(e) => setRouteName(e.target.value)}
+            />
           </FormControl>
         </ModalBody>
 
         <ModalFooter>
           <Button
             bgColor="DarkPurple"
-            onClick={onClose}
+            onClick={createOffice}
             color="white"
             fontWeight="500"
           >

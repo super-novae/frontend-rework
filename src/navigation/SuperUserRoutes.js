@@ -27,6 +27,7 @@ export default function SuperUserRoutes() {
         res.auth_token
       );
       setUser(res.auth_token);
+      return res;
     }
   };
 

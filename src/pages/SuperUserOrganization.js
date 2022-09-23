@@ -24,6 +24,8 @@ const ElectionList = [
   { id: "elec-he73901jsnv985lkmn216789fh4", name: "SRC Elections" },
 ];
 
+// TODO: Get all elections belonging to an organization
+
 export default function SuperUserOrganization({ logout }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {

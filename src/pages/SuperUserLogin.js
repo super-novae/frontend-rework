@@ -51,11 +51,13 @@ function LoginForm({ loginHandler }) {
     return true;
   };
 
-  const onLoginClick = () => {
+  const onLoginClick = async () => {
     setLoading(true);
     const shouldLogin = validateLoginInput();
     if (shouldLogin) {
-      loginHandler(username, password);
+      const response = await loginHandler(username, password);
+      console.log("SuperUserLogin: ", response);
+      if (response) setLoading(false);
     }
   };
 

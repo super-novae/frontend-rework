@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Container,
   Text,
@@ -14,28 +15,63 @@ import {
   ListView,
 } from "../components";
 import { BsPlus } from "react-icons/bs";
+import {
+  getAllElectionsInOrganization,
+  createElection,
+  deleteElection,
+} from "../api/election/election-api";
+import { getLocalStorage } from "../util/local-storage.util";
 
-const ElectionList = [
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "SRC ELECTION",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "ACES ELECTION",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "ACES ELECTION",
-  },
-  {
-    id: "org-12sdf38fh3jsbfhgl37a2hagde732",
-    name: "GADRES ELECTION",
-  },
-];
-
-export default function AdminElection() {
+export default function AdminElection({ logout }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const [electionList, setElectionList] = useState([]);
+
+  useEffect(() => {
+    async function fetchAllElections() {
+      const json_admin = getLocalStorage("ADMIN");
+      const adminObj = JSON.parse(json_admin);
+      console.log("AdminObj: ", adminObj);
+      const electionList = await getAllElectionsInOrganization(
+        adminObj.token,
+        adminObj.orgId
+      );
+      if (electionList) setElectionList(electionList);
+    }
+
+    fetchAllElections();
+  }, []);
+
+  const createElectionHandler = async (createElectionBody) => {
+    const json_admin = getLocalStorage("ADMIN");
+    const adminObj = JSON.parse(json_admin);
+
+    createElectionBody = {
+      ...createElectionBody,
+      organization_id: adminObj.orgId,
+    };
+    console.log("NewCreateElectionBody: ", createElectionBody);
+
+    const newElection = await createElection(
+      adminObj.token,
+      createElectionBody
+    );
+    if (newElection) {
+      setElectionList((prev) => [...prev, newElection]);
+    }
+  };
+
+  const deleteElectionHandler = async (electionId) => {
+    const json_admin = getLocalStorage("ADMIN");
+    const adminObj = JSON.parse(json_admin);
+
+    const result = await deleteElection(adminObj.token, electionId);
+    if (result) {
+      setElectionList((prev) =>
+        prev.filter((election) => election.id !== electionId)
+      );
+    }
+  };
+
   return (
     <Container
       maxW="100%"
@@ -44,8 +80,12 @@ export default function AdminElection() {
       display="flex"
       flexDir={{ base: "column", md: "row" }}
     >
-      <CreateElectionModal isOpen={isOpen} onClose={onClose} />
-      <Sidebar color="DarkPurple" />
+      <CreateElectionModal
+        isOpen={isOpen}
+        onClose={onClose}
+        createElectionHandler={createElectionHandler}
+      />
+      <Sidebar color="DarkPurple" logout={logout} />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
@@ -76,16 +116,21 @@ export default function AdminElection() {
           <Heading fontWeight="500" fontSize="2xl" mt={10} mb={12}>
             Elections
           </Heading>
-          <HStack px={4} mb={5} display={{ base: "none", md: "flex" }}>
-            <Text flex={1} fontSize="xl">
-              ID
-            </Text>
-            <Text flex={2} fontSize="xl">
-              Name
-            </Text>
-          </HStack>
+          {electionList.length !== 0 && (
+            <HStack px={4} mb={5} display={{ base: "none", md: "flex" }}>
+              <Text flex={1} fontSize="xl">
+                ID
+              </Text>
+              <Text flex={2} fontSize="xl">
+                Name
+              </Text>
+            </HStack>
+          )}
           <Box display="flex" flexDir="column" flex={1} gap={6}>
-            <ListView listItem={ElectionList} />
+            <ListView
+              listItem={electionList}
+              deleteFunc={deleteElectionHandler}
+            />
           </Box>
         </Box>
       </Box>

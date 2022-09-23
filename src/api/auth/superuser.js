@@ -10,6 +10,7 @@ export const superuser_login = async (username, password) => {
       return user.data;
     }
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
+    return err.message;
   }
 };

@@ -5,9 +5,9 @@ import { BsTrashFill } from "react-icons/bs";
 export default function ListView({ listItem, navigateTo, deleteFunc }) {
   const navigate = useNavigate();
 
-  if (listItem === null) {
+  if (listItem === null || listItem.length === 0) {
     return (
-      <Center>
+      <Center h="full">
         <Text>There is nothing to show</Text>
       </Center>
     );
