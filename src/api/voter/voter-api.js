@@ -14,3 +14,55 @@ export const getAllVotersInOrganization = async (token, orgId) => {
     console.log(err);
   }
 };
+//voterLogin
+export const voterLogin = async (body) => {
+  const url =`${base_url}/api/v1/voters/login`
+  try {
+    const response = await axios.post(url, body, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("voterLogin: ", response.data);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+ // voterSignUp
+export const voterSignUp = async (body) => {
+  const url =`${base_url}/api/v1/voters/signup`
+  try {
+    const response = await axios.post(url, body, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("voterSignUp: ", response.data);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+//getSingleVoter
+export const getVoterById = async (token,voterId) => {
+  const url =`${base_url}/api/v1/voters/?voter_id=${voterId}`
+  try {
+    const response = await axios.post(url, body, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("getVoterById: ", response.data);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+//getVoterElections
+export const getVoterElectionsById = async (token,voterId) => {
+  const url =`${base_url}/api/v1/voters/?voter_id=${voterId}/elections`
+  try {
+    const response = await axios.post(url, body, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("getVoterElectionsById: ", response.data);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
