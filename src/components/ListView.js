@@ -2,7 +2,12 @@ import { Box, Center, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { BsTrashFill } from "react-icons/bs";
 
-export default function ListView({ listItem, navigateTo, deleteFunc }) {
+export default function ListView({
+  listItem,
+  navigateTo,
+  deleteFunc,
+  spec_case,
+}) {
   const navigate = useNavigate();
 
   if (listItem === null || listItem.length === 0) {
@@ -31,9 +36,17 @@ export default function ListView({ listItem, navigateTo, deleteFunc }) {
         display="flex"
         flex={1}
         flexDir={{ base: "column", md: "row" }}
-        onClick={() =>
-          navigate(navigateTo ? `${navigateTo}/${item.id}` : `${item.id}`)
-        }
+        onClick={() => {
+          if (spec_case) {
+            navigate(
+              navigateTo
+                ? `${navigateTo}/${item.name}/${item.id}`
+                : `${item.id}`
+            );
+          } else {
+            navigate(navigateTo ? `${navigateTo}/${item.id}` : `${item.id}`);
+          }
+        }}
       >
         <Text flex={1} fontSize={{ base: "md", md: "xl" }}>
           {item.id}

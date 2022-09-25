@@ -13,7 +13,7 @@ export default function VoterRoutes() {
   return (
     <Routes>
       <Route path="voter">
-        {voter ? (
+        {!voter ? (
           <>
             <Route index element={<VoterLogin />} />
             <Route path="forgot-password" element={<VoterForgotPassword />} />

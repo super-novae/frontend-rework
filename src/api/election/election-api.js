@@ -92,3 +92,32 @@ export const getCandidatesByOffice = async (token, electionId, officeId) => {
     console.log(err);
   }
 };
+
+export const createElectionCandidate = async (token, electionId, body) => {
+  const url = `${base_url}/api/v1/elections/${electionId}/candidates/`;
+  try {
+    const response = await axios.post(url, body, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("CreateElectionCandidate: ", response.data);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const deleteElectionCandidate = async (
+  token,
+  electionId,
+  candidateId
+) => {
+  const url = `${base_url}/api/v1/elections/${electionId}/candidates/${candidateId}`;
+  try {
+    const response = await axios.delete(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("DeleteElectionCandidate: ", response.data);
+  } catch (err) {
+    console.log(err);
+  }
+};

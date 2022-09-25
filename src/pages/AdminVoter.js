@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Container,
   Box,
@@ -5,40 +6,51 @@ import {
   Button,
   Text,
   useDisclosure,
+  Center,
+  FormControl,
+  Input,
+  FormLabel,
 } from "@chakra-ui/react";
 import { Sidebar, MobileHeader, CreateVoterModal } from "../components";
-import { BsChevronLeft, BsPlus } from "react-icons/bs";
+import { BsChevronLeft, BsPlus, BsFileSpreadsheetFill } from "react-icons/bs";
 
-const VoterList = [
-  {
-    id: "elec-he73901jsnv985lkmn216789fh4",
-    name: "Nobel Fiawornu",
-    email: "nobelfiawornu@email.com",
-  },
-  {
-    id: "elec-he73901jsnv985lkmn216789fh4",
-    name: "Nobel Fiawornu",
-    email: "nobelfiawornu@email.com",
-  },
-  {
-    id: "elec-he73901jsnv985lkmn216789fh4",
-    name: "Nobel Fiawornu",
-    email: "nobelfiawornu@email.com",
-  },
-  {
-    id: "elec-he73901jsnv985lkmn216789fh4",
-    name: "Nobel Fiawornu",
-    email: "nobelfiawornu@email.com",
-  },
-  {
-    id: "elec-he73901jsnv985lkmn216789fh4",
-    name: "Nobel Fiawornu",
-    email: "nobelfiawornu@email.com",
-  },
-];
+import { getAllVotersInOrganization } from "../api/voter/voter-api";
+import { adminRegisterVoter } from "../api/auth/voter";
+import { getLocalStorage } from "../util/local-storage.util";
 
-export default function AdminVoter() {
+export default function AdminVoter({ logout }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [voterList, setVoterList] = useState([]);
+
+  const [excel, setExcel] = useState(null);
+
+  useEffect(() => {
+    async function fetchAllVoters() {
+      const admin_json = getLocalStorage("ADMIN");
+      const adminObj = JSON.parse(admin_json);
+
+      const voters = await getAllVotersInOrganization(
+        adminObj.token,
+        adminObj.orgId
+      );
+      if (voters) setVoterList(voters);
+    }
+
+    fetchAllVoters();
+  }, []);
+
+  const registerVoter = async (body) => {
+    const admin_json = getLocalStorage("ADMIN");
+    const adminObj = JSON.parse(admin_json);
+
+    body = { ...body, organization_id: adminObj.orgId };
+
+    const newVoter = await adminRegisterVoter(adminObj.token, body);
+    if (newVoter) {
+      setVoterList((prev) => [...prev, newVoter]);
+    }
+  };
+
   return (
     <Container
       maxW="100%"
@@ -47,8 +59,12 @@ export default function AdminVoter() {
       display="flex"
       flexDir={{ base: "column", md: "row" }}
     >
-      <CreateVoterModal isOpen={isOpen} onClose={onClose} />
-      <Sidebar color="DarkPurple" />
+      <CreateVoterModal
+        isOpen={isOpen}
+        onClose={onClose}
+        registerVoterHandler={registerVoter}
+      />
+      <Sidebar color="DarkPurple" logout={logout} />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
@@ -64,36 +80,71 @@ export default function AdminVoter() {
               Administrator
             </Heading>
           </Box>
-          <Button
-            bgColor="DarkPurple"
-            color="white"
-            size="lg"
-            fontWeight="normal"
-            gap={{ base: 0, md: 3 }}
-            onClick={onOpen}
-          >
-            <BsPlus />
-            <Text display={{ base: "none", md: "inline" }}>CREATE VOTER</Text>
-          </Button>
+          <Box display="flex" alignItems="center" gap={3}>
+            <Button
+              bgColor="DarkPurple"
+              color="white"
+              size="lg"
+              fontWeight="normal"
+              gap={{ base: 0, md: 3 }}
+              onClick={onOpen}
+            >
+              <BsPlus />
+              <Text display={{ base: "none", md: "inline" }}>CREATE VOTER</Text>
+            </Button>
+            <FormControl>
+              <FormLabel
+                htmlFor="bulk-reg"
+                p={{ base: 4, md: 3 }}
+                m={0}
+                backgroundColor="DarkPurple"
+                color="white"
+                display="flex"
+                flexDir="row"
+                gap={2}
+                borderRadius={5}
+                align-items="center"
+                w="fit-content"
+              >
+                <Center>
+                  <BsFileSpreadsheetFill />
+                </Center>
+                <Text display={{ base: "none", md: "inline" }}>
+                  BULK REGISTER
+                </Text>
+              </FormLabel>
+              <Input
+                type="file"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                id="bulk-reg"
+                hidden
+                onChange={(e) => {
+                  console.log(e.target.files[0]);
+                }}
+              />
+            </FormControl>
+          </Box>
         </Box>
         <Heading fontWeight="500" fontSize="1.3em" my={7}>
           Voters
         </Heading>
-        <Box display={{ base: "none", md: "flex" }} p={4}>
-          <Heading fontWeight="400" fontSize="1.2em" flex={1}>
-            ID
-          </Heading>
-          <Box display="flex" flex={2}>
+        {voterList.length !== 0 && (
+          <Box display={{ base: "none", md: "flex" }} p={4}>
             <Heading fontWeight="400" fontSize="1.2em" flex={1}>
-              Name
+              ID
             </Heading>
-            <Heading fontWeight="400" fontSize="1.2em" flex={2}>
-              Email
-            </Heading>
+            <Box display="flex" flex={2}>
+              <Heading fontWeight="400" fontSize="1.2em" flex={1}>
+                Name
+              </Heading>
+              <Heading fontWeight="400" fontSize="1.2em" flex={2}>
+                Email
+              </Heading>
+            </Box>
           </Box>
-        </Box>
+        )}
         <Box display="flex" flex={1} flexDir="column" gap={6}>
-          <AdminVoterList listItem={VoterList} />
+          <AdminVoterList listItem={voterList} />
         </Box>
       </Box>
     </Container>
@@ -101,6 +152,12 @@ export default function AdminVoter() {
 }
 
 function AdminVoterList({ listItem }) {
+  if (listItem.length === 0)
+    return (
+      <Center h="full">
+        <Text>There is nothing to show</Text>
+      </Center>
+    );
   return listItem.map((item) => (
     <Box
       display="flex"

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -15,7 +16,35 @@ import {
 } from "@chakra-ui/react";
 import { BsCaretDown } from "react-icons/bs";
 
-export default function CreateVoterModal({ isOpen, onClose }) {
+import { programmes, colleges, years } from "../assets/form-enums";
+
+export default function CreateVoterModal({
+  isOpen,
+  onClose,
+  registerVoterHandler,
+}) {
+  const [name, setName] = useState("");
+  const [college, setCollege] = useState("");
+  const [studentId, setStudentId] = useState("");
+  const [year, setYear] = useState("");
+  const [email, setEmail] = useState("");
+  const [programme, setProgramme] = useState("");
+  const [telephone, setTelephone] = useState("");
+
+  const registerVoter = async () => {
+    const body = {
+      name,
+      college,
+      year,
+      email,
+      programme,
+      telephone_number: telephone,
+      student_id: studentId,
+    };
+    registerVoterHandler(body);
+    onClose();
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -31,38 +60,41 @@ export default function CreateVoterModal({ isOpen, onClose }) {
             <ModalBody>
               <FormControl>
                 <FormLabel>Name</FormLabel>
-                <Input />
+                <Input value={name} onChange={(e) => setName(e.target.value)} />
               </FormControl>
               <FormControl>
                 <FormLabel>College</FormLabel>
-                <Select placeholder="Select option" icon={<BsCaretDown />}>
-                  <option value="option1">
-                    College of Agriculture and Natural Resources
-                  </option>
-                  <option value="option2">
-                    College of Art and Built Environment
-                  </option>
-                  <option value="option3">
-                    College of Humanities and Social Sciences
-                  </option>
-                  <option value="option4">College of Engineering</option>
-                  <option value="option5">College of Health Sciences</option>
-                  <option value="option6">College of Science</option>
+                <Select
+                  placeholder="Select option"
+                  icon={<BsCaretDown />}
+                  onChange={(e) => setCollege(e.target.value)}
+                >
+                  {colleges.map((college) => (
+                    <option value={college} key={college}>
+                      {college}
+                    </option>
+                  ))}
                 </Select>
               </FormControl>
               <FormControl>
                 <FormLabel>Student ID</FormLabel>
-                <Input />
+                <Input
+                  value={studentId}
+                  onChange={(e) => setStudentId(e.target.value)}
+                />
               </FormControl>
               <FormControl>
                 <FormLabel>Year</FormLabel>
-                <Select placeholder="Select option" icon={<BsCaretDown />}>
-                  <option value="option1">Year One</option>
-                  <option value="option2">Year Two</option>
-                  <option value="option3">Year Three</option>
-                  <option value="option3">Year Four</option>
-                  <option value="option3">Year Five</option>
-                  <option value="option3">Year Six</option>
+                <Select
+                  placeholder="Select option"
+                  icon={<BsCaretDown />}
+                  onChange={(e) => setYear(e.target.value)}
+                >
+                  {years.map((year) => (
+                    <option value={year} key={year}>
+                      {year}
+                    </option>
+                  ))}
                 </Select>
               </FormControl>
             </ModalBody>
@@ -75,15 +107,31 @@ export default function CreateVoterModal({ isOpen, onClose }) {
             <ModalBody>
               <FormControl>
                 <FormLabel>Email</FormLabel>
-                <Input />
+                <Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </FormControl>
               <FormControl>
                 <FormLabel>Programme</FormLabel>
-                <Input />
+                <Select
+                  placeholder="Select option"
+                  icon={<BsCaretDown />}
+                  onChange={(e) => setProgramme(e.target.value)}
+                >
+                  {programmes.map((programme) => (
+                    <option value={programme} key={programme}>
+                      {programme}
+                    </option>
+                  ))}
+                </Select>
               </FormControl>
               <FormControl>
                 <FormLabel>Telephone</FormLabel>
-                <Input />
+                <Input
+                  value={telephone}
+                  onChange={(e) => setTelephone(e.target.value)}
+                />
               </FormControl>
             </ModalBody>
           </Box>
@@ -91,7 +139,7 @@ export default function CreateVoterModal({ isOpen, onClose }) {
         <ModalFooter>
           <Button
             bgColor="DarkPurple"
-            onClick={onClose}
+            onClick={registerVoter}
             color="white"
             fontWeight="500"
           >

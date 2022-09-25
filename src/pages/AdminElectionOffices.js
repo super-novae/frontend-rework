@@ -148,6 +148,7 @@ export default function AdminElectionOffices({ logout }) {
               listItem={officeList}
               navigateTo={`/admin/elections/${id}/offices`}
               deleteFunc={deleteOfficeHandler}
+              spec_case={true}
             />
           </Box>
         </Box>

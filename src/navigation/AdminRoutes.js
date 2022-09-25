@@ -64,7 +64,7 @@ export default function AdminRoutes() {
               element={<AdminElectionOffices logout={handleAdminLogout} />}
             />
             <Route
-              path="elections/:electionId/offices/:officeId"
+              path="elections/:electionId/offices/:officeName/:officeId"
               element={<AdminElectionOffice logout={handleAdminLogout} />}
             />
           </>
