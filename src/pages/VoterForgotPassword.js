@@ -9,6 +9,8 @@ import {
   Input,
   Flex,
 } from "@chakra-ui/react";
+import "../App.css"
+import { useNavigate } from "react-router-dom";
 
 export default function VoterForgotPassword() {
   return (
@@ -19,6 +21,7 @@ export default function VoterForgotPassword() {
           display={{ base: "none", md: "flex" }}
           flex={1}
           bgColor="CelticBlue"
+          className="voter-background"
           h="full"
         ></Box>
       </Flex>
@@ -27,6 +30,7 @@ export default function VoterForgotPassword() {
 }
 
 function FP_FORM() {
+  const navigate = useNavigate();
   return (
     <Box
       display="flex"
@@ -49,9 +53,21 @@ function FP_FORM() {
           <FormLabel>Email</FormLabel>
           <Input />
         </FormControl>
+        <Box w="full" display="flex" justifyContent="right" my={2} >
+          <Text
+              onClick={() => navigate("/voter")}
+              _hover={{
+                fontWeight: "600",
+                cursor: "pointer",
+              }}
+            >
+              Already have credentials?
+            </Text>
+        </Box>
         <Button w="full" bgColor="CelticBlue" mt={10} color="white">
           SEND
         </Button>
+
       </Box>
     </Box>
   );
