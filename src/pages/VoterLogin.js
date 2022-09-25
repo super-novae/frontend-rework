@@ -20,8 +20,8 @@ export default function VoterLogin() {
         <Box
           display={{ base: "none", md: "flex" }}
           flex={1}
-          bgColor="CelticBlue"
           h="full"
+          className="voter-background"
         ></Box>
       </Flex>
     </Container>
@@ -59,7 +59,7 @@ function LoginForm({ navigate }) {
         </FormControl>
         <FormControl>
           <FormLabel>Password</FormLabel>
-          <Input />
+          <Input type="password"/>
         </FormControl>
         <Box w="full" display="flex" justifyContent="right" my={2}>
           <Text

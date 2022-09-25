@@ -11,6 +11,7 @@ import {
   Flex,
   CircularProgress,
 } from "@chakra-ui/react";
+import "../App.css";
 
 export default function AdminLogin({ login }) {
   return (
@@ -20,7 +21,7 @@ export default function AdminLogin({ login }) {
         <Box
           display={{ base: "none", md: "flex" }}
           flex={1}
-          bgColor="#160F29"
+          className="admin-super-background"
           h="full"
         ></Box>
       </Flex>
@@ -71,6 +72,7 @@ function LoginForm({ login }) {
           <Input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            type="password"
           />
         </FormControl>
         <Button w="full" bgColor="CameoPink" mt={10} onClick={loginEvent}>

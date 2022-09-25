@@ -12,6 +12,7 @@ import {
   Flex,
   CircularProgress,
 } from "@chakra-ui/react";
+import "../index.css"
 
 export default function SuperUserLogin({ loginHandler }) {
   return (
@@ -21,7 +22,7 @@ export default function SuperUserLogin({ loginHandler }) {
         <Box
           display={{ base: "none", md: "flex" }}
           flex={1}
-          bgColor="#160F29"
+          className="admin-super-background"
           h="full"
         ></Box>
       </Flex>
