@@ -220,31 +220,25 @@ function CreateCandidateModal({ isOpen, onClose, createCandidateHandler }) {
     onClose();
   };
 
-  const uploadImageToS3 = async (file) => {
-    try {
-      const res = await s3
-        .putObject({
-          Key: file.name,
-          Bucket: bucketName,
-          Body: file,
-        })
-        .promise();
-      console.log("UploadImageToS3: ", res);
-      return res;
-    } catch (err) {
-      console.log(err);
-    }
+  const uploadS3 = async (e) => {
+    const imageName = e.target.files[0].name;
+    await s3
+      .putObject({
+        Key: imageName,
+        Bucket: bucketName,
+        Body: e.target.files[0],
+      })
+      .promise()
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
   };
 
-  const onChangeImageField = async (e) => {
-    const res = await uploadImageToS3(e.target.files[0]);
-
-    if (res) {
-      const imageName = e.target.files[0].name;
-      const url = `https://${bucketName}.s3-${region}.amazonaws.com/${imageName}`;
-      console.log("ImageURL: ", url);
-      setImageUrl(url);
-    }
+  const onChangeInputField = async (e) => {
+    const imageName = e.target.files[0].name;
+    uploadS3(e);
+    const url = `https://${bucketName}.s3-${region}.amazonaws.com/${imageName}`;
+    setImageUrl(url);
+    console.log(url);
   };
 
   return (
@@ -297,7 +291,7 @@ function CreateCandidateModal({ isOpen, onClose, createCandidateHandler }) {
                   accept="image/png, image/gif, image/jpeg"
                   hidden
                   onChange={(e) => {
-                    onChangeImageField(e);
+                    onChangeInputField(e);
                   }}
                 />
               </FormControl>

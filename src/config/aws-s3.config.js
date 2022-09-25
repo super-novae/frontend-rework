@@ -1,9 +1,10 @@
 import * as AWS from "aws-sdk";
 
-const accessKeyId = process.env.REACT_APP_ACCESSKEYID;
-const secretAccessKey = process.env.REACT_APP_SECRETACCESSKEY;
+const accessKeyId = process.env.REACT_APP_ACCESSKEYID.toString();
+console.log(accessKeyId);
+const secretAccessKey = process.env.REACT_APP_SECRETACCESSKEY.toString();
 
-export const region = process.env.REACT_APP_REGION;
+export const region = process.env.REACT_APP_REGION.toString();
 
 export const s3 = new AWS.S3({
   region,
@@ -12,4 +13,4 @@ export const s3 = new AWS.S3({
   signatureVersion: "v4",
 });
 
-export const bucketName = process.env.REACT_APP_BUCKETNAME;
+export const bucketName = process.env.REACT_APP_BUCKETNAME.toString();
