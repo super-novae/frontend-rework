@@ -229,6 +229,7 @@ function CreateCandidateModal({ isOpen, onClose, createCandidateHandler }) {
           Body: file,
         })
         .promise();
+      console.log("UploadImageToS3: ", res);
       return res;
     } catch (err) {
       console.log(err);
