@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import {
@@ -8,35 +8,44 @@ import {
   VotingScreen,
 } from "../pages";
 
-import {  
-  setLocalStorage   
-} from "../util/local-storage.util";
+import { setLocalStorage, getLocalStorage } from "../util/local-storage.util";
 
 import { voterLogin } from "../api/voter/voter-api";
 
 export default function VoterRoutes() {
   const [voter, setVoter] = useState();
-  const handleVoterLogin = async (email, password) => {
-    const body={[email]:email,[password]:password}
-    const voter= await voterLogin(body);
+
+  useEffect(() => {
+    const voter = getLocalStorage("VOTER");
     if (voter) {
       setVoter(voter);
-      const voterObject = { token: voter.auth_token, voterId: voter.id };
+    }
+  }, []);
+
+  const handleVoterLogin = async (email, password) => {
+    const voter = await voterLogin(email, password);
+    if (voter) {
+      setVoter(voter);
+      const voterObject = {
+        token: voter.auth_token,
+        voterId: voter.id,
+        organizationId: voter.organization_id,
+      };
       setLocalStorage("VOTER", JSON.stringify(voterObject));
     }
-  }
+  };
   return (
     <Routes>
       <Route path="voter">
         {!voter ? (
           <>
-            <Route index element={<VoterLogin login={handleVoterLogin}/>} />
+            <Route index element={<VoterLogin login={handleVoterLogin} />} />
             <Route path="forgot-password" element={<VoterForgotPassword />} />
           </>
         ) : (
           <>
             <Route index element={<VoterHome />} />
-            <Route path="voting" element={<VotingScreen />} />
+            <Route path="elections/:electionId" element={<VotingScreen />} />
           </>
         )}
       </Route>

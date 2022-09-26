@@ -9,11 +9,11 @@ import {
   FormLabel,
   Input,
   Flex,
-  CircularProgress
+  CircularProgress,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
-export default function VoterLogin({login}) {
+export default function VoterLogin({ login }) {
   const navigate = useNavigate();
   return (
     <Container maxW="100%" h="100vh" p={0}>
@@ -30,7 +30,7 @@ export default function VoterLogin({login}) {
   );
 }
 
-function LoginForm({ navigate,login }) {
+function LoginForm({ navigate, login }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,6 +38,7 @@ function LoginForm({ navigate,login }) {
   const loginEvent = () => {
     setLoading(true);
     login(email, password);
+    setLoading(false);
   };
   return (
     <Box
@@ -65,11 +66,19 @@ function LoginForm({ navigate,login }) {
         </Box>
         <FormControl mb={{ base: 5, md: 3 }}>
           <FormLabel>Email</FormLabel>
-          <Input type='email' value={email} onChange={(e)=>setEmail(e.target.value)}/>
+          <Input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </FormControl>
         <FormControl>
           <FormLabel>Password</FormLabel>
-          <Input type='password' value={password} onChange={(e)=>setPassword(e.target.value)}/>
+          <Input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </FormControl>
         <Box w="full" display="flex" justifyContent="right" my={2}>
           <Text
@@ -82,10 +91,16 @@ function LoginForm({ navigate,login }) {
             Forgot Password
           </Text>
         </Box>
-        <Button w="full" bgColor="CelticBlue" mt={10} color="white" onClick={loginEvent}>
-        {loading && (
+        <Button
+          w="full"
+          bgColor="CelticBlue"
+          mt={10}
+          color="white"
+          onClick={loginEvent}
+        >
+          {loading && (
             <CircularProgress isIndeterminate color="black" size="5" mr="3" />
-          )}          
+          )}
           LOGIN
         </Button>
       </Box>
