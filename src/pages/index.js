@@ -11,3 +11,4 @@ export { default as VoterLogin } from "./VoterLogin";
 export { default as VoterForgotPassword } from "./VoterForgotPassword";
 export { default as VoterHome } from "./VoterHome";
 export { default as VotingScreen } from "./VotingScreen";
+export { default as ElectionResults } from "./ElectionResults";

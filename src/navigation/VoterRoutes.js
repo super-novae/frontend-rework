@@ -6,6 +6,7 @@ import {
   VoterHome,
   VoterLogin,
   VotingScreen,
+  ElectionResults
 } from "../pages";
 
 import {  
@@ -37,6 +38,8 @@ export default function VoterRoutes() {
           <>
             <Route index element={<VoterHome />} />
             <Route path="voting" element={<VotingScreen />} />
+              <Route path="elections/:electionId/results" element={<ElectionResults/> } />
+              {/* <Route path="results" element={<ElectionResults/> } /> */}
           </>
         )}
       </Route>
