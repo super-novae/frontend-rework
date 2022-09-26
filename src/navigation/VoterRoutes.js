@@ -8,12 +8,17 @@ import {
   VotingScreen,
 } from "../pages";
 
+import {  
+  setLocalStorage   
+} from "../util/local-storage.util";
+
 import { voterLogin } from "../api/voter/voter-api";
 
 export default function VoterRoutes() {
   const [voter, setVoter] = useState();
   const handleVoterLogin = async (email, password) => {
-    const voter= await voterLogin(email, password);
+    const body={email:email,password:password}
+    const voter= await voterLogin(body);
     if (voter) {
       setVoter(voter);
       const voterObject = { token: voter.auth_token, voterId: voter.id };

@@ -18,9 +18,7 @@ export const getAllVotersInOrganization = async (token, orgId) => {
 export const voterLogin = async (body) => {
   const url =`${base_url}/api/v1/voters/login`
   try {
-    const response = await axios.post(url, body, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.post(url, body);
     console.log("voterLogin: ", response.data);
     return response.data;
   } catch (err) {
@@ -31,9 +29,7 @@ export const voterLogin = async (body) => {
 export const voterSignUp = async (body) => {
   const url =`${base_url}/api/v1/voters/signup`
   try {
-    const response = await axios.post(url, body, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.post(url, body);
     console.log("voterSignUp: ", response.data);
     return response.data;
   } catch (err) {
@@ -41,12 +37,10 @@ export const voterSignUp = async (body) => {
   }
 };
 //getSingleVoter
-export const getVoterById = async (token,voterId) => {
+export const getVoterById = async (voterId) => {
   const url =`${base_url}/api/v1/voters/?voter_id=${voterId}`
   try {
-    const response = await axios.post(url, body, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get(url);
     console.log("getVoterById: ", response.data);
     return response.data;
   } catch (err) {
@@ -54,12 +48,10 @@ export const getVoterById = async (token,voterId) => {
   }
 };
 //getVoterElections
-export const getVoterElectionsById = async (token,voterId) => {
+export const getVoterElectionsById = async (voterId) => {
   const url =`${base_url}/api/v1/voters/?voter_id=${voterId}/elections`
   try {
-    const response = await axios.post(url, body, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get(url);
     console.log("getVoterElectionsById: ", response.data);
     return response.data;
   } catch (err) {
