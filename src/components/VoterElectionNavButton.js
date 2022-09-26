@@ -1,10 +1,14 @@
 import { Button, Text } from "@chakra-ui/react";
 import { BsChevronRight } from "react-icons/bs";
 
-export default function VoterElectionNavButton({ title, navigate }) {
+export default function VoterElectionNavButton({
+  title,
+  navigate,
+  electionId,
+}) {
   return (
     <Button
-      onClick={() => navigate("voting")}
+      onClick={() => navigate(`/voter/elections/${electionId}`)}
       display="flex"
       flexDir="row"
       alignItems="center"

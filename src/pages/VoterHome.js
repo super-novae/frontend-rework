@@ -1,9 +1,44 @@
-import { Container, Text, Box, Heading, Button } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import {
+  Container,
+  Text,
+  Box,
+  Heading,
+  Button,
+  Center,
+} from "@chakra-ui/react";
 import { Sidebar, MobileHeader, VoterElectionNavButton } from "../components";
 import { useNavigate } from "react-router-dom";
 
+import { getVoterElections } from "../api/voter/voter-api";
+import { getLocalStorage } from "../util/local-storage.util";
+
 export default function VoterHome({ logout }) {
   const navigate = useNavigate();
+
+  const [elections, setElections] = useState([]);
+
+  useEffect(() => {
+    async function fetchElections() {
+      const voter_json = getLocalStorage("VOTER");
+      const voterObj = JSON.parse(voter_json);
+
+      const elections = await getVoterElections(
+        voterObj.token,
+        voterObj.voterId,
+        voterObj.organizationId
+      );
+      if (elections) {
+        setElections([
+          ...elections.college_elections,
+          ...elections.department_elections,
+          ...elections.src_elections,
+        ]);
+      }
+    }
+
+    fetchElections();
+  }, []);
 
   return (
     <Container
@@ -34,22 +69,25 @@ export default function VoterHome({ logout }) {
           </Heading>
         </Box>
         <Box display="flex" flex={1} flexDir="column" pt={7}>
-          <Box display="flex" flex={1} flexDir="column">
-            <Heading fontSize="1.2em" fontWeight="600" mb={5}>
-              Outstanding Elections
-            </Heading>
-            <Box display="flex" flexDir="row" gap={4}>
-              <VoterElectionNavButton
-                title="SRC Elections"
-                navigate={navigate}
-              />
-              <VoterElectionNavButton
-                title="Unity Hall Elections"
-                navigate={navigate}
-              />
+          {elections.length === 0 ? (
+            <Center>
+              <Text>No New Elections</Text>
+            </Center>
+          ) : (
+            <Box display="flex" flex={1} flexDir="column">
+              <Box display="flex" flexDir="row" gap={4}>
+                {elections.map((election) => (
+                  <VoterElectionNavButton
+                    title={election.name}
+                    navigate={navigate}
+                    key={election.id}
+                    electionId={election.id}
+                  />
+                ))}
+              </Box>
             </Box>
-          </Box>
-          <Box display="flex" flex={1} flexDir="column">
+          )}
+          {/* <Box display="flex" flex={1} flexDir="column">
             <Heading fontSize="1.2em" fontWeight="600" mb={5}>
               Voted Elections
             </Heading>
@@ -59,7 +97,7 @@ export default function VoterHome({ logout }) {
                 navigate={navigate}
               />
             </Box>
-          </Box>
+          </Box> */}
           <Box>
             <Button
               bgColor="CelticBlue"

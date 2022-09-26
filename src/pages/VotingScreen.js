@@ -1,8 +1,34 @@
+import { useEffect, useState } from "react";
 import { Container, Text, Box, Heading, Button } from "@chakra-ui/react";
 import { Sidebar, MobileHeader } from "../components";
 import { BsChevronLeft } from "react-icons/bs";
+import { useParams } from "react-router-dom";
+
+import { getElectionCandidatesByElectionId } from "../api/voter/voter-api";
+import { getLocalStorage } from "../util/local-storage.util";
 
 export default function VotingScreen({ logout }) {
+  const { electionId } = useParams;
+
+  const [candidates, setCandidates] = useState([]);
+
+  useEffect(() => {
+    async function fetchCandidates() {
+      const voter_json = getLocalStorage("VOTER");
+      const voterObj = JSON.parse(voter_json);
+
+      const candidates = await getElectionCandidatesByElectionId(
+        voterObj.token,
+        electionId
+      );
+      if (candidates) {
+        setCandidates(candidates.candidates);
+      }
+    }
+
+    fetchCandidates();
+  }, []);
+
   return (
     <Container
       maxW="100%"

@@ -38,3 +38,16 @@ export const getVoterElections = async (token, voterId, organizationId) => {
     console.log(err);
   }
 };
+
+export const getElectionCandidatesByElectionId = async (token, electionId) => {
+  const url = `${base_url}/api/v1/elections/${electionId}/candidates/`;
+  try {
+    const response = await axios.get(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("GetElectionCandidatesByElectionId: ", response.data);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
