@@ -1,7 +1,6 @@
 import * as AWS from "aws-sdk";
 
 const accessKeyId = process.env.REACT_APP_ACCESSKEYID.toString();
-console.log(accessKeyId);
 const secretAccessKey = process.env.REACT_APP_SECRETACCESSKEY.toString();
 
 export const region = process.env.REACT_APP_REGION.toString();
