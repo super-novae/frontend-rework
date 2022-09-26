@@ -2,7 +2,7 @@ import { Container, Text, Box, Heading, Button } from "@chakra-ui/react";
 import { Sidebar, MobileHeader } from "../components";
 import { BsChevronLeft } from "react-icons/bs";
 
-export default function VotingScreen() {
+export default function VotingScreen({ logout }) {
   return (
     <Container
       maxW="100%"
@@ -11,7 +11,7 @@ export default function VotingScreen() {
       display="flex"
       flexDir={{ base: "column", md: "row" }}
     >
-      <Sidebar color="CelticBlue" />
+      <Sidebar color="CelticBlue" logout={logout} />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box

@@ -2,7 +2,7 @@ import { Container, Text, Box, Heading, Button } from "@chakra-ui/react";
 import { Sidebar, MobileHeader, VoterElectionNavButton } from "../components";
 import { useNavigate } from "react-router-dom";
 
-export default function VoterHome() {
+export default function VoterHome({ logout }) {
   const navigate = useNavigate();
 
   return (
@@ -13,7 +13,7 @@ export default function VoterHome() {
       display="flex"
       flexDir={{ base: "column", md: "row" }}
     >
-      <Sidebar color="CelticBlue" />
+      <Sidebar color="CelticBlue" logout={logout} />
       <MobileHeader />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box

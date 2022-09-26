@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 import {
   VoterForgotPassword,
@@ -8,12 +8,18 @@ import {
   VotingScreen,
 } from "../pages";
 
-import { setLocalStorage, getLocalStorage } from "../util/local-storage.util";
+import {
+  setLocalStorage,
+  getLocalStorage,
+  deleteLocalStorage,
+} from "../util/local-storage.util";
 
 import { voterLogin } from "../api/voter/voter-api";
 
 export default function VoterRoutes() {
   const [voter, setVoter] = useState();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const voter = getLocalStorage("VOTER");
@@ -34,6 +40,13 @@ export default function VoterRoutes() {
       setLocalStorage("VOTER", JSON.stringify(voterObject));
     }
   };
+
+  const handleVoterLogout = () => {
+    deleteLocalStorage("VOTER");
+    setVoter(null);
+    navigate("/voter");
+  };
+
   return (
     <Routes>
       <Route path="voter">
@@ -44,8 +57,11 @@ export default function VoterRoutes() {
           </>
         ) : (
           <>
-            <Route index element={<VoterHome />} />
-            <Route path="elections/:electionId" element={<VotingScreen />} />
+            <Route index element={<VoterHome logout={handleVoterLogout} />} />
+            <Route
+              path="elections/:electionId"
+              element={<VotingScreen logout={handleVoterLogout} />}
+            />
           </>
         )}
       </Route>
