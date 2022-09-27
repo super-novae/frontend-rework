@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import './Results.styles.css'
 import { Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS } from 'chart.js/auto'
-import { MdMenu } from "react-icons/md";
+
  
-const Results = () => {
+const Results = ({labels, data,name}) => {
+  console.log(data);
   const [position, setPosition] = useState('President')
+  
+  
   const [plugins, setPlugins] = useState([{
     beforeDraw: function (chart) {
       if (chart.config.options.elements.center) {
@@ -92,7 +95,7 @@ const Results = () => {
   const userOptions = {
     elements: {
       center: {
-        text: `${position}`,
+        text: name,
         color: '#000000',
         sidePadding: 20,
         maxFontSize: 80,
@@ -109,15 +112,20 @@ const Results = () => {
   }
 
   const userData = {
-    labels: ['president', 'financial', 'gen_sec', 'organiser'],
+    labels: labels,
     datasets: [
       {
         label: 'Users Gained',
-        data: [78, 79, 67, 98],
+        data: data ,
         backgroundColor: [
-          '#ff0000',
+          '#0000ff',          
           '#00ff00',
-          '#0000ff'
+          '#ff0000',
+          '#176ba0',    
+         
+          '#c02323',
+          '#efe34e',         
+           '#db4cb2',
         ]
       }
     ]
@@ -125,26 +133,14 @@ const Results = () => {
   }
   const offices = ['President', 'General Secretary', 'Financial Secretary', 'Organiser']
   return (
-    <div className='container'>
-      <nav className='results__header'>
-        <ul className='results__header--list'>
-          <li className='results__header--nav'>
-           <MdMenu color="DarkPurple" size="1.5em" />
-            <p>Results</p>
-          </li>
-          <li className='results__header--input'>
-            <input type='text' placeholder='Search position' />
-            <MdMenu color="DarkPurple" size="1.5em" />
-          </li>
-        </ul>
-      </nav>
+    <div className='single__result'>      
       <section className='results__positions'>
-        <h1>President</h1>
+        <h1>{ name}</h1>
       </section>
       <section className='results__card'>
         <div className='results__card--header'>
-          <p>President</p>
-          <p>Candidates:6</p>
+          <p>{name}</p>
+          <p>Candidates:{data.length}</p>
         </div>
         <div className='results--chart'>
           <Doughnut
@@ -153,9 +149,7 @@ const Results = () => {
             plugins={plugins}
           />
         </div>
-
       </section>
-
     </div>
   )
 }
