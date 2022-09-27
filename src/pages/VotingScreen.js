@@ -286,7 +286,7 @@ function ElectionCandidateCard({
         <Box
           display="flex"
           borderWidth={1}
-          w="201px"
+          w="200px"
           h="220px"
           borderRadius={5}
           mb={3}
