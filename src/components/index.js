@@ -7,3 +7,4 @@ export { default as ListView } from "./ListView";
 export { default as CreateElectionModal } from "./CreateElectionModal";
 export { default as CreateVoterModal } from "./CreateVoterModal";
 export { default as VoterElectionNavButton } from "./VoterElectionNavButton";
+export { default as Results } from "./results/Results";
