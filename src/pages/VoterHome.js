@@ -62,7 +62,7 @@ export default function VoterHome({ logout }) {
       flexDir={{ base: "column", md: "row" }}
     >
       <Sidebar color="CelticBlue" logout={logout} />
-      <MobileHeader />
+      <MobileHeader logout={logout} color="CelticBlue" />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
           display="flex"
@@ -71,7 +71,11 @@ export default function VoterHome({ logout }) {
           justifyContent="space-between"
           pb={7}
         >
-          <Heading fontWeight="semibold" fontSize="3xl">
+          <Heading
+            fontWeight="semibold"
+            fontSize="3xl"
+            display={{ base: "none", md: "inline" }}
+          >
             Voter
           </Heading>
           <Heading fontWeight="500" fontSize="2xl">

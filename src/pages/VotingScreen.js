@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import {
   Container,
   Text,
@@ -7,10 +7,6 @@ import {
   Button,
   useRadioGroup,
   useRadio,
-  HStack,
-  chakra,
-  Stack,
-  useToast,
   Image,
   Center,
   CircularProgress,
@@ -31,6 +27,7 @@ export default function VotingScreen({ logout }) {
   const [candidates, setCandidates] = useState([]);
   const [offices, setOffices] = useState([]);
   const [voterId, setVoterId] = useState();
+  const [voterName, setVoterName] = useState("");
 
   const [screenLoading, setScreenLoading] = useState([]);
   const [voting, setVoting] = useState(false);
@@ -77,12 +74,22 @@ export default function VotingScreen({ logout }) {
       );
     });
     setVoting(false);
+    navigate(-1);
   }
+
+  useLayoutEffect(() => {
+    const voter_json = getLocalStorage("VOTER");
+    const voterObj = JSON.parse(voter_json);
+
+    setVoterName(voterObj.name);
+  }, []);
 
   useEffect(() => {
     async function fetchCandidates() {
       const voter_json = getLocalStorage("VOTER");
       const voterObj = JSON.parse(voter_json);
+
+      setVoterName(voterObj.name);
 
       const candidates = await getElectionCandidatesByElectionId(
         voterObj.token,
@@ -121,7 +128,7 @@ export default function VotingScreen({ logout }) {
       flexDir={{ base: "column", md: "row" }}
     >
       <Sidebar color="CelticBlue" logout={logout} />
-      <MobileHeader />
+      <MobileHeader logout={logout} color="CelticBlue" />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
           display="flex"
@@ -132,14 +139,18 @@ export default function VotingScreen({ logout }) {
         >
           <Box display="flex" gap={4} alignItems="center">
             <BsChevronLeft size="22" onClick={() => navigate(-1)} />
-            <Heading fontWeight="semibold" fontSize="3xl">
+            <Heading
+              fontWeight="semibold"
+              fontSize="3xl"
+              display={{ base: "none", md: "inline" }}
+            >
               Voter
             </Heading>
           </Box>
           <Heading fontWeight="500" fontSize="2xl">
             Hello,{" "}
             <Text display="inline" fontWeight="600">
-              Nobel Fiawornu
+              {voterName}
             </Text>
           </Heading>
         </Box>
@@ -183,7 +194,7 @@ export default function VotingScreen({ logout }) {
                     {voting && (
                       <CircularProgress
                         isIndeterminate
-                        color="white"
+                        color="black"
                         size="8"
                       />
                     )}
@@ -218,8 +229,11 @@ function ElectionOffice({ office, candidates, updateResults }) {
         display="flex"
         flexDir="row"
         justifyContent="space-evenly"
-        w="full"
+        w={{ base: "full", md: "full" }}
         {...group}
+        h="300px"
+        overflowX="scroll"
+        scrollBehavior="smooth"
       >
         {candidates.map((candidate) => {
           const radio = getRadioProps({ value: candidate.name });

@@ -40,7 +40,7 @@ export default function SuperUserHome({ logout }) {
       flexDir={{ base: "column", md: "row" }}
     >
       <Sidebar color="DarkPurple" logout={logout} />
-      <MobileHeader />
+      <MobileHeader logout={logout} color="DarkPurple" />
       <Box display="flex" flex={1} flexDir="column" p={10}>
         <Box
           display="flex"
