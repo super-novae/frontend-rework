@@ -6,6 +6,8 @@ import {
   Button,
   Text,
   useDisclosure,
+  Center,
+  CircularProgress,
 } from "@chakra-ui/react";
 import {
   Sidebar,
@@ -19,12 +21,7 @@ import { BsChevronLeft, BsPencil, BsPlusLg, BsTrashFill } from "react-icons/bs";
 
 import { getOrganizationById } from "../api/organization/organization-api";
 import { getAdministratorById, deleteAdminById } from "../api/auth/admin";
-
-const ElectionList = [
-  { id: "elec-he73901jsnv985lkmn216789fh4", name: "SRC Elections" },
-];
-
-// TODO: Get all elections belonging to an organization
+import { getAllElectionsInOrganization } from "../api/election/election-api";
 
 export default function SuperUserOrganization({ logout }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -38,7 +35,8 @@ export default function SuperUserOrganization({ logout }) {
 
   const [orgDetails, setOrgDetails] = useState(null);
   const [admin, setAdmin] = useState(null);
-  // const [electionList, setElectionList] = useState(null);
+
+  const [screenLoading, setScreenLoading] = useState(true);
 
   useEffect(() => {
     const super_user_token = localStorage.getItem(
@@ -49,6 +47,7 @@ export default function SuperUserOrganization({ logout }) {
       const admin = await getAdministratorById(super_user_token, id);
       if (admin) {
         setAdmin(admin);
+        setScreenLoading(false);
       }
     }
 
@@ -100,7 +99,7 @@ export default function SuperUserOrganization({ logout }) {
               <BsChevronLeft
                 color="black"
                 size="1.3em"
-                onClick={() => navigate("/superuser")}
+                onClick={() => navigate(-1)}
               />
             </Box>
             <Heading fontWeight="semibold" fontSize="3xl">
@@ -136,10 +135,16 @@ export default function SuperUserOrganization({ logout }) {
         <Heading fontWeight="500" fontSize="1.3em" my={7}>
           {orgDetails?.name}
         </Heading>
-        <Heading fontWeight="400" fontSize="1.3em" mb={7}>
-          Administrator
-        </Heading>
-        {admin ? (
+        {!screenLoading && (
+          <Heading fontWeight="400" fontSize="1.3em" mb={7}>
+            Administrator
+          </Heading>
+        )}
+        {screenLoading ? (
+          <Center h="full">
+            <CircularProgress isIndeterminate color="DarkPurple" size="10" />
+          </Center>
+        ) : admin ? (
           <Box
             display="flex"
             borderWidth={1}
@@ -180,12 +185,6 @@ export default function SuperUserOrganization({ logout }) {
             <Text>Nothing to show here</Text>
           </Box>
         )}
-        <Heading fontWeight="400" fontSize="1.3em" my={7}>
-          Elections
-        </Heading>
-        <Box display="flex" flex={1} flexDir="column" gap={4}>
-          <ListView listItem={ElectionList} />
-        </Box>
       </Box>
     </Container>
   );

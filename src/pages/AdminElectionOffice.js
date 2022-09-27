@@ -20,15 +20,16 @@ import {
   Select,
   Center,
   Image,
+  CircularProgress,
 } from "@chakra-ui/react";
 import { Sidebar, MobileHeader, ListView } from "../components";
 import {
   BsPlus,
-  BsChevronRight,
+  BsChevronLeft,
   BsPersonCircle,
   BsCaretDown,
 } from "react-icons/bs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   getCandidatesByOffice,
@@ -46,6 +47,8 @@ export default function AdminElectionOffice({ logout }) {
 
   const [candidateList, setCandidateList] = useState([]);
 
+  const [screenLoading, setScreenLoading] = useState(true);
+
   useEffect(() => {
     async function fetchCandidates() {
       const json_admin = getLocalStorage("ADMIN");
@@ -56,7 +59,10 @@ export default function AdminElectionOffice({ logout }) {
         electionId,
         officeId
       );
-      setCandidateList(candidates);
+      if (candidates) {
+        setCandidateList(candidates);
+        setScreenLoading(false);
+      }
     }
 
     fetchCandidates();
@@ -99,6 +105,8 @@ export default function AdminElectionOffice({ logout }) {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <Container
       maxW="100%"
@@ -122,9 +130,16 @@ export default function AdminElectionOffice({ logout }) {
           justifyContent="space-between"
           pb={7}
         >
-          <Heading fontWeight="semibold" fontSize="3xl">
-            Administrator
-          </Heading>
+          <Box display="flex" flexDir="row" gap={3} alignItems="center">
+            <BsChevronLeft
+              color="black"
+              size="1.3em"
+              onClick={() => navigate(-1)}
+            />
+            <Heading fontWeight="semibold" fontSize="3xl">
+              Administrator
+            </Heading>
+          </Box>
           <Button
             bgColor="DarkPurple"
             color="white"
@@ -198,10 +213,21 @@ export default function AdminElectionOffice({ logout }) {
             </HStack>
           )}
           <Box display="flex" flexDir="column" flex={1} gap={6}>
-            <ListView
-              listItem={candidateList}
-              deleteFunc={deleteElectionHandler}
-            />
+            {screenLoading ? (
+              <Center h="full">
+                <CircularProgress
+                  isIndeterminate
+                  color="DarkPurple"
+                  size="10"
+                />
+              </Center>
+            ) : (
+              <ListView
+                listItem={candidateList}
+                deleteFunc={deleteElectionHandler}
+                dont_go={true}
+              />
+            )}
           </Box>
         </Box>
       </Box>

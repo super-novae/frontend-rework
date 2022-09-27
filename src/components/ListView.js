@@ -7,6 +7,7 @@ export default function ListView({
   navigateTo,
   deleteFunc,
   spec_case,
+  dont_go,
 }) {
   const navigate = useNavigate();
 
@@ -37,14 +38,18 @@ export default function ListView({
         flex={1}
         flexDir={{ base: "column", md: "row" }}
         onClick={() => {
-          if (spec_case) {
-            navigate(
-              navigateTo
-                ? `${navigateTo}/${item.name}/${item.id}`
-                : `${item.id}`
-            );
+          if (dont_go) {
+            // do nothing
           } else {
-            navigate(navigateTo ? `${navigateTo}/${item.id}` : `${item.id}`);
+            if (spec_case) {
+              navigate(
+                navigateTo
+                  ? `${navigateTo}/${item.name}/${item.id}`
+                  : `${item.id}`
+              );
+            } else {
+              navigate(navigateTo ? `${navigateTo}/${item.id}` : `${item.id}`);
+            }
           }
         }}
       >
