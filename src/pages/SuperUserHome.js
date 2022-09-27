@@ -7,6 +7,8 @@ import {
   Button,
   HStack,
   useDisclosure,
+  CircularProgress,
+  Center,
 } from "@chakra-ui/react";
 import {
   Sidebar,
@@ -26,10 +28,13 @@ export default function SuperUserHome({ logout }) {
 
   const [orgList, setOrgList] = useState(null);
 
+  const [screenLoading, setScreenLoading] = useState(true);
+
   async function fetchOrganizations(token) {
     const organizations = await getAllOrganizations(token);
     if (organizations) {
       setOrgList(organizations);
+      setScreenLoading(false);
     }
   }
 
@@ -88,23 +93,31 @@ export default function SuperUserHome({ logout }) {
           <Heading fontWeight="500" fontSize="2xl" mt={10} mb={12}>
             Organizations
           </Heading>
-          {orgList !== null && (
-            <HStack px={4} mb={5} display={{ base: "none", md: "flex" }}>
-              <Text flex={1} fontSize="xl">
-                ID
-              </Text>
-              <Text flex={2} fontSize="xl">
-                Name
-              </Text>
-            </HStack>
+          {screenLoading ? (
+            <Center h="full" color="DarkPurple">
+              <CircularProgress isIndeterminate color="black" size="10" />
+            </Center>
+          ) : (
+            <>
+              {orgList !== null && (
+                <HStack px={4} mb={5} display={{ base: "none", md: "flex" }}>
+                  <Text flex={1} fontSize="xl">
+                    ID
+                  </Text>
+                  <Text flex={2} fontSize="xl">
+                    Name
+                  </Text>
+                </HStack>
+              )}
+              <Box display="flex" flexDir="column" flex={1} gap={6}>
+                <ListView
+                  listItem={orgList}
+                  navigateTo="organization"
+                  deleteFunc={deleteOrganizationHandler}
+                />
+              </Box>
+            </>
           )}
-          <Box display="flex" flexDir="column" flex={1} gap={6}>
-            <ListView
-              listItem={orgList}
-              navigateTo="organization"
-              deleteFunc={deleteOrganizationHandler}
-            />
-          </Box>
         </Box>
       </Box>
     </Container>

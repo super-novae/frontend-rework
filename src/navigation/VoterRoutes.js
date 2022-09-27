@@ -36,6 +36,7 @@ export default function VoterRoutes() {
         token: voter.auth_token,
         voterId: voter.id,
         organizationId: voter.organization_id,
+        name: voter.name,
       };
       setLocalStorage("VOTER", JSON.stringify(voterObject));
     }

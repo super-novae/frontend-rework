@@ -17,10 +17,12 @@ import {
   ModalBody,
   ModalCloseButton,
   FormLabel,
+  Center,
+  CircularProgress,
 } from "@chakra-ui/react";
 import { Sidebar, MobileHeader, ListView } from "../components";
-import { BsPlus } from "react-icons/bs";
-import { useParams } from "react-router-dom";
+import { BsPlus, BsChevronLeft } from "react-icons/bs";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   getElectionOffices,
@@ -35,6 +37,10 @@ export default function AdminElectionOffices({ logout }) {
 
   const [officeList, setOfficeList] = useState([]);
 
+  const [screenLoading, setScreenLoading] = useState(true);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchAllOffices() {
       const json_admin = getLocalStorage("ADMIN");
@@ -43,6 +49,7 @@ export default function AdminElectionOffices({ logout }) {
       const officeList = await getElectionOffices(adminObj.token, id);
       if (officeList) {
         setOfficeList(officeList);
+        setScreenLoading(false);
       }
     }
 
@@ -94,9 +101,16 @@ export default function AdminElectionOffices({ logout }) {
           justifyContent="space-between"
           pb={7}
         >
-          <Heading fontWeight="semibold" fontSize="3xl">
-            Administrator
-          </Heading>
+          <Box display="flex" flexDir="row" gap={3} alignItems="center">
+            <BsChevronLeft
+              color="black"
+              size="1.3em"
+              onClick={() => navigate(-1)}
+            />
+            <Heading fontWeight="semibold" fontSize="3xl">
+              Administrator
+            </Heading>
+          </Box>
           <Button
             bgColor="DarkPurple"
             color="white"
@@ -144,12 +158,22 @@ export default function AdminElectionOffices({ logout }) {
             </HStack>
           )}
           <Box display="flex" flexDir="column" flex={1} gap={6}>
-            <ListView
-              listItem={officeList}
-              navigateTo={`/admin/elections/${id}/offices`}
-              deleteFunc={deleteOfficeHandler}
-              spec_case={true}
-            />
+            {screenLoading ? (
+              <Center h="full">
+                <CircularProgress
+                  isIndeterminate
+                  color="DarkPurple"
+                  size="10"
+                />
+              </Center>
+            ) : (
+              <ListView
+                listItem={officeList}
+                navigateTo={`/admin/elections/${id}/offices`}
+                deleteFunc={deleteOfficeHandler}
+                spec_case={true}
+              />
+            )}
           </Box>
         </Box>
       </Box>

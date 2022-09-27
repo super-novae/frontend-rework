@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Container,
   Box,
@@ -8,9 +9,12 @@ import {
   FormLabel,
   Input,
   Flex,
+  CircularProgress,
 } from "@chakra-ui/react";
-import "../App.css"
+import "../App.css";
 import { useNavigate } from "react-router-dom";
+
+import { resetVoterPassword } from "../api/voter/voter-api";
 
 export default function VoterForgotPassword() {
   return (
@@ -31,6 +35,17 @@ export default function VoterForgotPassword() {
 
 function FP_FORM() {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const resetPassword = async () => {
+    setLoading(true);
+    await resetVoterPassword(email);
+    setLoading(false);
+  };
+
   return (
     <Box
       display="flex"
@@ -51,23 +66,32 @@ function FP_FORM() {
         </Box>
         <FormControl mb={{ base: 5, md: 3 }}>
           <FormLabel>Email</FormLabel>
-          <Input />
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
         </FormControl>
-        <Box w="full" display="flex" justifyContent="right" my={2} >
+        <Box w="full" display="flex" justifyContent="right" my={2}>
           <Text
-              onClick={() => navigate("/voter")}
-              _hover={{
-                fontWeight: "600",
-                cursor: "pointer",
-              }}
-            >
-              Already have credentials?
-            </Text>
+            onClick={() => navigate("/voter")}
+            _hover={{
+              fontWeight: "600",
+              cursor: "pointer",
+            }}
+          >
+            Already have credentials?
+          </Text>
         </Box>
-        <Button w="full" bgColor="CelticBlue" mt={10} color="white">
+        <Button
+          w="full"
+          bgColor="CelticBlue"
+          mt={10}
+          color="white"
+          onClick={resetPassword}
+          gap={5}
+        >
+          {loading && (
+            <CircularProgress isIndeterminate color="black" size="8" />
+          )}
           SEND
         </Button>
-
       </Box>
     </Box>
   );

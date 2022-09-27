@@ -26,6 +26,16 @@ export const voterLogin = async (email, password) => {
   }
 };
 
+export const resetVoterPassword = async (email) => {
+  const url = `${base_url}/api/v1/voters/password_reset`;
+  try {
+    const response = await axios.post(url, { email });
+    console.log("ResetVoterPassword: ", response.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getVoterElections = async (token, voterId, organizationId) => {
   const url = `${base_url}/api/v1/voters/${voterId}/organization/${organizationId}/elections`;
   try {

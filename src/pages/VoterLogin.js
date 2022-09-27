@@ -38,8 +38,8 @@ function LoginForm({ navigate, login }) {
   const loginEvent = () => {
     setLoading(true);
     login(email, password);
-    setLoading(false);
   };
+
   return (
     <Box
       display="flex"
@@ -97,9 +97,10 @@ function LoginForm({ navigate, login }) {
           mt={10}
           color="white"
           onClick={loginEvent}
+          gap={5}
         >
           {loading && (
-            <CircularProgress isIndeterminate color="black" size="5" mr="3" />
+            <CircularProgress isIndeterminate color="black" size="8" />
           )}
           LOGIN
         </Button>

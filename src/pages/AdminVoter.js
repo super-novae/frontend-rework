@@ -10,6 +10,7 @@ import {
   FormControl,
   Input,
   FormLabel,
+  CircularProgress,
 } from "@chakra-ui/react";
 import { Sidebar, MobileHeader, CreateVoterModal } from "../components";
 import { BsChevronLeft, BsPlus, BsFileSpreadsheetFill } from "react-icons/bs";
@@ -17,12 +18,15 @@ import { BsChevronLeft, BsPlus, BsFileSpreadsheetFill } from "react-icons/bs";
 import { getAllVotersInOrganization } from "../api/voter/voter-api";
 import { adminRegisterVoter } from "../api/auth/voter";
 import { getLocalStorage } from "../util/local-storage.util";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminVoter({ logout }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [voterList, setVoterList] = useState([]);
 
   const [excel, setExcel] = useState(null);
+
+  const [screenLoading, setScreenLoading] = useState(true);
 
   useEffect(() => {
     async function fetchAllVoters() {
@@ -33,7 +37,10 @@ export default function AdminVoter({ logout }) {
         adminObj.token,
         adminObj.orgId
       );
-      if (voters) setVoterList(voters);
+      if (voters) {
+        setVoterList(voters);
+        setScreenLoading(false);
+      }
     }
 
     fetchAllVoters();
@@ -50,6 +57,8 @@ export default function AdminVoter({ logout }) {
       setVoterList((prev) => [...prev, newVoter]);
     }
   };
+
+  const navigate = useNavigate();
 
   return (
     <Container
@@ -75,7 +84,11 @@ export default function AdminVoter({ logout }) {
           pb={7}
         >
           <Box display="flex" alignItems="center" gap={3}>
-            <BsChevronLeft color="black" size="1.3em" />
+            <BsChevronLeft
+              color="black"
+              size="1.3em"
+              onClick={() => navigate(-1)}
+            />
             <Heading fontWeight="semibold" fontSize="3xl">
               Administrator
             </Heading>
@@ -144,7 +157,13 @@ export default function AdminVoter({ logout }) {
           </Box>
         )}
         <Box display="flex" flex={1} flexDir="column" gap={6}>
-          <AdminVoterList listItem={voterList} />
+          {screenLoading ? (
+            <Center h="full">
+              <CircularProgress color="DarkPurple" size="10" isIndeterminate />
+            </Center>
+          ) : (
+            <AdminVoterList listItem={voterList} />
+          )}
         </Box>
       </Box>
     </Container>
@@ -160,6 +179,7 @@ function AdminVoterList({ listItem }) {
     );
   return listItem.map((item) => (
     <Box
+      key={item.id}
       display="flex"
       borderWidth={1}
       borderColor="DarkPurple"
