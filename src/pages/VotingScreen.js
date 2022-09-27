@@ -12,6 +12,8 @@ import {
   Stack,
   useToast,
   Image,
+  Center,
+  CircularProgress,
 } from "@chakra-ui/react";
 import { Sidebar, MobileHeader } from "../components";
 import { BsChevronLeft } from "react-icons/bs";
@@ -28,7 +30,7 @@ const Candidates = [
 ];
 
 export default function VotingScreen({ logout }) {
-  const { electionId } = useParams;
+  const { electionId } = useParams();
 
   const [candidates, setCandidates] = useState([]);
   const [offices, setOffices] = useState([]);
@@ -48,7 +50,22 @@ export default function VotingScreen({ logout }) {
       );
       if (candidates) {
         setCandidates(candidates.candidates);
+        getOffices(candidates.candidates);
       }
+    }
+
+    function getOffices(candidateList) {
+      const officeList = [];
+      candidateList.map((candidate) => {
+        if (officeList.includes(candidate.office_name)) {
+        } else {
+          officeList.push(candidate.office_name);
+        }
+      });
+
+      console.log("OfficeList: ", officeList);
+      setOffices(officeList);
+      setScreenLoading(false);
     }
 
     fetchCandidates();
@@ -96,29 +113,21 @@ export default function VotingScreen({ logout }) {
             gap={10}
             alignItems="center"
           >
-            <Box>
-              <Heading fontWeight="normal" fontSize="2xl">
-                President
-              </Heading>
-              <Box display="flex" flexDir="row" gap={10} pt={3} flexWrap="wrap">
-                <ElectionCandidateCard />
-                <ElectionCandidateCard />
-                <ElectionCandidateCard />
-                <ElectionCandidateCard />
+            {screenLoading ? (
+              <Center h="full">
+                <CircularProgress
+                  color="DarkPurple"
+                  size="10"
+                  isIndeterminate
+                />
+              </Center>
+            ) : (
+              <Box w="full">
+                {offices.map((office) => (
+                  <ElectionOffice office={office} candidates={candidates} />
+                ))}
               </Box>
-            </Box>
-
-            <Button
-              color="white"
-              bgColor="CelticBlue"
-              alignSelf="center"
-              size="lg"
-              px={10}
-              fontWeight="normal"
-              mt={10}
-            >
-              SUBMIT VOTE
-            </Button>
+            )}
           </Box>
         </Box>
       </Box>
@@ -126,97 +135,85 @@ export default function VotingScreen({ logout }) {
   );
 }
 
-function ElectionCandidateCard() {
-  return (
-    <Box display="flex" flexDir="column">
-      <Box
-        display="flex"
-        borderWidth={1}
-        w="200px"
-        h="220px"
-        borderRadius={5}
-        mb={3}
-      ></Box>
-      <Box w="200px">
-        <Heading fontSize="md">Augustine Agbeko</Heading>
-        <Text fontSize="sm" noOfLines={1} color="ShadowBlue">
-          BSc. Computer Engineering
-        </Text>
-      </Box>
-    </Box>
-  );
-}
-
-// 1. Create a component that consumes the `useRadio` hook
-function RadioCard(props) {
-  const { getInputProps, getCheckboxProps, state } = useRadio(props);
-
-  const input = getInputProps();
-  const checkbox = getCheckboxProps();
-
-  return (
-    <Box as="label">
-      <input {...input} />
-      <Box
-        {...checkbox}
-        cursor="pointer"
-        borderWidth="1px"
-        borderRadius="md"
-        boxShadow="md"
-        _checked={{
-          bg: "teal.600",
-          color: "white",
-          borderColor: "teal.600",
-        }}
-        _focus={{
-          boxShadow: "outline",
-        }}
-        p={1}
-      >
-        <Box
-          w="200px"
-          h="220px"
-          borderWidth={1}
-          borderColor={state.isChecked ? "white" : "black"}
-        ></Box>
-        {props.children}
-      </Box>
-    </Box>
-  );
-}
-
-// Step 2: Use the `useRadioGroup` hook to control a group of custom radios.
-function Example() {
-  const options = [
-    { candidate: "Candidate 1", item: "Mango" },
-    { candidate: "Candidate 2", item: "Apple" },
-    { candidate: "Candidate 3", item: "Banana" },
-  ];
-
-  const [choice, setChoice] = useState({});
-
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: "Office",
-    value: { choice },
-    onChange: setChoice,
+function ElectionOffice({ office, candidates }) {
+  const { getRootProps, getRadioProps, value } = useRadioGroup({
+    name: "candidates",
+    defaultValue: 1,
+    onChange: (value) => console.log(value),
   });
 
   const group = getRootProps();
 
   return (
-    <Box>
-      <Text>Choice: {choice.candidate}</Text>
-      <HStack {...group}>
-        {options.map((value) => {
-          const radio = getRadioProps({ value });
-          return (
-            <RadioCard key={value} {...radio}>
-              <Text>{value.candidate}</Text>
-              <Text>{value.item}</Text>
-            </RadioCard>
-          );
+    <Box key={office}>
+      <Text>{office}</Text>
+      <Box
+        display="flex"
+        flexDir="row"
+        justifyContent="space-evenly"
+        w="full"
+        {...group}
+      >
+        {candidates.map((candidate) => {
+          const radio = getRadioProps({ value: candidate.name });
+          if (candidate.office_name === office)
+            return (
+              <ElectionCandidateCard
+                candidateName={candidate.name}
+                candidateProgramme={candidate.programme}
+                key={candidate.id}
+                {...radio}
+              />
+            );
         })}
-      </HStack>
+      </Box>
+    </Box>
+  );
+}
+
+function ElectionCandidateCard({
+  candidateName,
+  candidateProgramme,
+  ...props
+}) {
+  const { getInputProps, getCheckboxProps } = useRadio(props);
+  const input = getInputProps();
+  const checkbox = getCheckboxProps();
+
+  return (
+    <Box display="flex" flexDir="column" as="label">
+      <input {...input} hidden />
+      <Box
+        {...checkbox}
+        borderRadius={3}
+        bgColor="white"
+        p={2}
+        _checked={{
+          bgColor: "teal",
+          color: "white",
+          textColor: "white",
+        }}
+        _focus={{
+          boxShadow: "outline",
+        }}
+        display="flex"
+        flexDir="column"
+      >
+        <Box
+          display="flex"
+          borderWidth={1}
+          w="200px"
+          h="220px"
+          borderRadius={5}
+          mb={3}
+        ></Box>
+        <Box w="200px">
+          <Heading fontSize="md">{candidateName}</Heading>
+          <Text fontSize="sm" noOfLines={1}>
+            {candidateProgramme}
+          </Text>
+        </Box>
+      </Box>
     </Box>
   );
 }
