@@ -291,7 +291,7 @@ function ElectionCandidateCard({
           mb={3}
         >
           {candidateImage && (
-            <Image src={candidateImage} boxSize="201px" objectFit="contain" />
+            <Image src={candidateImage} boxSize="200px" objectFit="contain" />
           )}
         </Box>
         <Box w="200px">
