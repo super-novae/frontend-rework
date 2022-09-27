@@ -238,7 +238,7 @@ function CreateCandidateModal({ isOpen, onClose, createCandidateHandler }) {
   const [programme, setProgramme] = useState("");
 
   const createCandidate = () => {
-    const data = { name, programme, profile_image_url: imageUrl };
+    const data = { name, programme };
     createCandidateHandler(data);
     onClose();
   };
@@ -287,7 +287,7 @@ function CreateCandidateModal({ isOpen, onClose, createCandidateHandler }) {
                 <BsPersonCircle color="#c4c4c4" size="200" />
               ) : (
                 <Image
-                  src="https://e-voting-images-upload.s3-us-east-1.amazonaws.com/Screenshot(3).png"
+                  src={image}
                   boxSize="200px"
                   objectFit="contain"
                   alt={name}

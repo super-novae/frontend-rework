@@ -21,6 +21,7 @@ import { IoMdAdd } from "react-icons/io";
 import {
   getAllOrganizations,
   deleteOrganizationById,
+  createOrganization,
 } from "../api/organization/organization-api";
 
 export default function SuperUserHome({ logout }) {
@@ -55,6 +56,17 @@ export default function SuperUserHome({ logout }) {
     fetchOrganizations(super_user_token);
   };
 
+  const handleCreateOrganization = async (name) => {
+    const super_user_token = localStorage.getItem(
+      process.env.REACT_APP_SUPER_USER_LS_KEY.toString()
+    );
+    const newOrg = createOrganization(super_user_token, name);
+    if (newOrg) {
+      setOrgList((prev) => [...prev, newOrg]);
+    }
+    onClose();
+  };
+
   return (
     <Container
       maxW="100%"
@@ -63,7 +75,11 @@ export default function SuperUserHome({ logout }) {
       display="flex"
       flexDir={{ base: "column", md: "row" }}
     >
-      <CreateOrganizationModal isOpen={isOpen} onClose={onClose} />
+      <CreateOrganizationModal
+        isOpen={isOpen}
+        onClose={onClose}
+        handleCreateOrganization={handleCreateOrganization}
+      />
       <Sidebar color="DarkPurple" logout={logout} />
       <MobileHeader logout={logout} color="DarkPurple" />
       <Box display="flex" flex={1} flexDir="column" p={10}>

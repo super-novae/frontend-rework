@@ -242,6 +242,7 @@ function ElectionOffice({ office, candidates, updateResults }) {
               <ElectionCandidateCard
                 candidateName={candidate.name}
                 candidateProgramme={candidate.programme}
+                candidateImage={candidate.profile_image_url}
                 key={candidate.id}
                 {...radio}
               />
@@ -255,6 +256,7 @@ function ElectionOffice({ office, candidates, updateResults }) {
 function ElectionCandidateCard({
   candidateName,
   candidateProgramme,
+  candidateImage,
   ...props
 }) {
   const { getInputProps, getCheckboxProps } = useRadio(props);
@@ -287,7 +289,11 @@ function ElectionCandidateCard({
           h="220px"
           borderRadius={5}
           mb={3}
-        ></Box>
+        >
+          {candidateImage && (
+            <Image src={candidateImage} boxSize="200px" objectFit="contain" />
+          )}
+        </Box>
         <Box w="200px">
           <Heading fontSize="md">{candidateName}</Heading>
           <Text fontSize="sm" noOfLines={1}>

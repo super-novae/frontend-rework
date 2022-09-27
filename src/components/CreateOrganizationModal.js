@@ -17,7 +17,11 @@ import { createOrganization } from "../api/organization/organization-api";
 
 //TODO: Fix the create organization api call
 
-export default function CreateOrganizationModal({ isOpen, onClose }) {
+export default function CreateOrganizationModal({
+  isOpen,
+  onClose,
+  handleCreateOrganization,
+}) {
   const super_user_token = localStorage.getItem(
     process.env.REACT_APP_SUPER_USER_LS_KEY.toString()
   );
@@ -25,23 +29,24 @@ export default function CreateOrganizationModal({ isOpen, onClose }) {
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
 
-  const validateInput = () => {
-    setNameError(false);
-    if (name === "") {
-      setNameError(true);
-      return false;
-    }
-    return true;
+  // const validateInput = () => {
+  //   setNameError(false);
+  //   if (name === "") {
+  //     setNameError(true);
+  //     return false;
+  //   }
+  //   return true;
+  // };
+
+  // const handleCreateOrganization = () => {
+  //   createOrganization(super_user_token, name);
+  //     onClose();
+  // };
+
+  const createOrganization = () => {
+    handleCreateOrganization(name);
   };
 
-  const handleCreateOrganization = () => {
-    const shouldCreateOrganization = validateInput();
-
-    if (shouldCreateOrganization) {
-      createOrganization(super_user_token, name);
-      onClose();
-    }
-  };
   return (
     <Modal
       isOpen={isOpen}

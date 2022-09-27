@@ -43,6 +43,7 @@ export const createOrganization = async (token, name) => {
       }
     );
     console.log("CreateOrganization: ", response.data);
+    return response.data;
   } catch (err) {
     console.log(err);
   }
