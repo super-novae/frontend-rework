@@ -22,7 +22,7 @@ export default function VoterLogin({ login }) {
         <Box
           display={{ base: "none", md: "flex" }}
           flex={1}
-          bgColor="CelticBlue"
+          className="voter-background"
           h="full"
         ></Box>
       </Flex>
@@ -93,7 +93,7 @@ function LoginForm({ navigate, login }) {
         </Box>
         <Button
           w="full"
-          className="voter-background"
+          bgColor="CelticBlue"
           mt={10}
           color="white"
           onClick={loginEvent}
