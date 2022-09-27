@@ -157,7 +157,7 @@ export default function VotingScreen({ logout }) {
         </Box>
         <Box display="flex" flex={1} flexDir="column" pt={7}>
           <Heading fontWeight="semibold" fontSize="2xl" mb={5}>
-            SRC ELECTIONS
+            ACESs ELECTIONS
           </Heading>
           <Box
             display="flex"
@@ -291,9 +291,6 @@ function ElectionCandidateCard({
           borderRadius={5}
           mb={3}
         >
-          {candidateImage && (
-            <Image src={candidateImage} boxSize="200px" objectFit="contain" />
-          )}
         </Box>
         <Box w="200px">
           <Heading fontSize="md">{candidateName}</Heading>
