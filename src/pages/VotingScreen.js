@@ -72,9 +72,10 @@ export default function VotingScreen({ logout }) {
         voterObj.voterId,
         vR
       );
+      console.log(response);
     });
     setVoting(false);
-    navigate(-1);
+    // navigate(-1);
   }
 
   useLayoutEffect(() => {
