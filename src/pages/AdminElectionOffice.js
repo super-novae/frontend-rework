@@ -194,14 +194,6 @@ export default function AdminElectionOffice({ logout }) {
                 {`${officeName}`}
               </Heading>
             </Box>
-            <Button
-              bgColor="DarkPurple"
-              color="white"
-              size={{ base: "md", md: "lg" }}
-              fontWeight="normal"
-            >
-              VIEW RESULTS
-            </Button>
           </Box>
           <Heading fontWeight="400" fontSize="2xl" my={5}>
             Candidates
@@ -241,11 +233,12 @@ export default function AdminElectionOffice({ logout }) {
 
 function CreateCandidateModal({ isOpen, onClose, createCandidateHandler }) {
   const [imageUrl, setImageUrl] = useState("");
+  const [image, setImage] = useState(null);
   const [name, setName] = useState("");
   const [programme, setProgramme] = useState("");
 
   const createCandidate = () => {
-    const data = { name, programme };
+    const data = { name, programme, profile_image_url: imageUrl };
     createCandidateHandler(data);
     onClose();
   };
@@ -290,14 +283,14 @@ function CreateCandidateModal({ isOpen, onClose, createCandidateHandler }) {
             gap={2}
           >
             <Center display="flex" flex={1}>
-              {imageUrl === "" ? (
+              {image === null ? (
                 <BsPersonCircle color="#c4c4c4" size="200" />
               ) : (
                 <Image
-                  src={imageUrl}
+                  src="https://e-voting-images-upload.s3-us-east-1.amazonaws.com/Screenshot(3).png"
                   boxSize="200px"
                   objectFit="contain"
-                  // borderRadius="full"
+                  alt={name}
                 />
               )}
             </Center>
@@ -321,11 +314,15 @@ function CreateCandidateModal({ isOpen, onClose, createCandidateHandler }) {
                   accept="image/png, image/gif, image/jpeg"
                   hidden
                   onChange={(e) => {
+                    setImage(e.target.files[0]);
+                    console.log("Image: ", e.target.files[0]);
                     onChangeInputField(e);
                   }}
                 />
               </FormControl>
-              <Text fontWeight="600">REMOVE PHOTO</Text>
+              {/* <Text fontWeight="600" as="button" onClick={() => setImage(null)}>
+                REMOVE PHOTO
+              </Text> */}
             </Center>
           </Box>
           <FormControl>
@@ -355,7 +352,7 @@ function CreateCandidateModal({ isOpen, onClose, createCandidateHandler }) {
             color="white"
             fontWeight="500"
           >
-            SAVES
+            SAVE
           </Button>
         </ModalFooter>
       </ModalContent>
