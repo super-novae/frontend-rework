@@ -23,6 +23,7 @@ import {
   deleteOrganizationById,
   createOrganization,
 } from "../api/organization/organization-api";
+import { getLocalStorage } from "../util/local-storage.util";
 
 export default function SuperUserHome({ logout }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -57,10 +58,9 @@ export default function SuperUserHome({ logout }) {
   };
 
   const handleCreateOrganization = async (name) => {
-    const super_user_token = localStorage.getItem(
-      process.env.REACT_APP_SUPER_USER_LS_KEY.toString()
-    );
-    const newOrg = createOrganization(super_user_token, name);
+    const super_user_token = getLocalStorage("SUPER_USER");
+    console.log(super_user_token);
+    const newOrg = await createOrganization(super_user_token, name);
     if (newOrg) {
       setOrgList((prev) => [...prev, newOrg]);
     }

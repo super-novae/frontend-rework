@@ -69,7 +69,7 @@ export default function CreateOrganizationModal({
         <ModalFooter>
           <Button
             bgColor="DarkPurple"
-            onClick={handleCreateOrganization}
+            onClick={createOrganization}
             color="white"
             fontWeight="500"
           >
