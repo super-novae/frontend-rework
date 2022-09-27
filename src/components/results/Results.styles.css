@@ -1,0 +1,120 @@
+.results__header {
+    display:flex;
+    flex-direction: row;
+    flex:1 1 auto;
+    padding:1em 0;
+    width:100%;
+}
+.results__header--list {
+    align-items: center;
+    justify-content:space-between;
+    display:flex;
+    flex-direction:row;
+    flex:1 1 auto;
+    width:100%;
+    list-style: none;   
+}
+.results__positions,.results__card {
+    display:flex;  
+}
+.results__positions {
+  
+    flex-direction:row;
+    width:60%;
+    align-items:center;
+    justify-content:space-evenly;
+    margin:2em auto 0 auto;    
+}
+.results__card {
+    flex-direction:column;
+    flex:1 1 auto;
+    width:40%;
+    margin:2em auto 0 auto;
+    border:1px solid #ccc;    
+}
+.results__header--nav {
+    display:flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    width:100%;
+}
+.results__header--input>input {
+    border:none;
+    outline:none;
+}
+.results__header--input {
+    border:1px solid grey;
+    border-radius: 5px;
+    padding:0.5em 0.2em;
+    display:flex;
+    flex-direction: row;
+    flex:1 1 auto;
+} 
+@media only screen and (max-width: 630px) {
+    .results__card {
+        flex-direction:column;
+        flex:1 1 auto;
+        width:80%;
+        margin:2em auto 0 auto;
+        border:1px solid #ccc;
+        
+    }
+    .results__header--list {
+        display:flex;
+        flex-direction: row;       
+    }
+    .results__header--nav {
+        display:flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: row;
+      
+        width:100%;
+    }
+    .results__header--input>input {
+        border:none;
+        outline:none;
+    }
+    .results__header--input {
+        border:1px solid grey;
+        border-radius: 5px;
+        padding:0.5em 0.2em;
+        display:flex;
+        flex-direction: row;
+        flex:1 1 auto;    
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    
+    .results__card {
+        flex-direction:column;
+        flex:1 1 auto;
+        width:100%;
+        margin:2em auto 0 auto;
+        border:1px solid #ccc;        
+    }
+    .results__header--list {
+        display:flex;
+        flex-direction: column;
+    }
+    .results__header--nav {
+        display:flex;
+        align-items: center;
+        justify-content: flex-start;
+        
+        width:100%;
+    }
+    .results__header--input>input {
+        border:none;
+        outline:none;
+    }
+    .results__header--input {
+        border:1px solid grey;
+        border-radius: 5px;
+        padding:0.5em 0.2em;
+    
+    }
+}
+

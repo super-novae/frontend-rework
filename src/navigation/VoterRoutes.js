@@ -6,6 +6,7 @@ import {
   VoterHome,
   VoterLogin,
   VotingScreen,
+  ElectionResults
 } from "../pages";
 
 import {
