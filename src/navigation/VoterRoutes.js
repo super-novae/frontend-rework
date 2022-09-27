@@ -6,7 +6,7 @@ import {
   VoterHome,
   VoterLogin,
   VotingScreen,
-  ElectionResults
+  ElectionResults,
 } from "../pages";
 
 import {
@@ -63,6 +63,10 @@ export default function VoterRoutes() {
             <Route
               path="elections/:electionId"
               element={<VotingScreen logout={handleVoterLogout} />}
+            />
+            <Route
+              path="elections/:electionId/results"
+              element={<ElectionResults />}
             />
           </>
         )}

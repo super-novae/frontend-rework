@@ -136,7 +136,11 @@ export default function AdminElectionOffice({ logout }) {
               size="1.3em"
               onClick={() => navigate(-1)}
             />
-            <Heading fontWeight="semibold" fontSize="3xl">
+            <Heading
+              fontWeight="semibold"
+              fontSize="3xl"
+              display={{ base: "none", md: "inline" }}
+            >
               Administrator
             </Heading>
           </Box>

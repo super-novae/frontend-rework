@@ -102,7 +102,11 @@ export default function SuperUserOrganization({ logout }) {
                 onClick={() => navigate(-1)}
               />
             </Box>
-            <Heading fontWeight="semibold" fontSize="3xl">
+            <Heading
+              fontWeight="semibold"
+              fontSize="3xl"
+              display={{ base: "none", md: "inline" }}
+            >
               SuperUser
             </Heading>
           </Box>

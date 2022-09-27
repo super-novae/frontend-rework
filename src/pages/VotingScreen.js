@@ -224,16 +224,16 @@ function ElectionOffice({ office, candidates, updateResults }) {
 
   return (
     <Box key={office}>
-      <Text>{office}</Text>
+      <Text textAlign="center" fontWeight="600" fontSize="xl" my={2}>
+        {office}
+      </Text>
       <Box
         display="flex"
         flexDir="row"
+        flexWrap={{ base: "wrap", md: "nowrap" }}
         justifyContent="space-evenly"
-        w={{ base: "full", md: "full" }}
+        w="full"
         {...group}
-        h="300px"
-        overflowX="scroll"
-        scrollBehavior="smooth"
       >
         {candidates.map((candidate) => {
           const radio = getRadioProps({ value: candidate.name });

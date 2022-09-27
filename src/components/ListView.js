@@ -27,6 +27,7 @@ export default function ListView({
       borderWidth={1}
       borderColor="DarkPurple"
       borderRadius={{ base: 5, md: 3 }}
+      gap={{ base: 2, md: 0 }}
       p={4}
       _hover={{
         cursor: "pointer",
