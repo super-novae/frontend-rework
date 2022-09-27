@@ -61,3 +61,15 @@ export const getElectionCandidatesByElectionId = async (token, electionId) => {
     console.log(err);
   }
 };
+
+export const voterCastVotes = async (token, voterId, body) => {
+  const url = `${base_url}/api/v1/voters/${voterId}/vote`;
+  try {
+    const response = await axios.post(url, body, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("VoterCastVotes: ", response.data);
+  } catch (err) {
+    console.log(err);
+  }
+};

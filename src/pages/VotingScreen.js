@@ -19,25 +19,65 @@ import { Sidebar, MobileHeader } from "../components";
 import { BsChevronLeft } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { getElectionCandidatesByElectionId } from "../api/voter/voter-api";
+import {
+  getElectionCandidatesByElectionId,
+  voterCastVotes,
+} from "../api/voter/voter-api";
 import { getLocalStorage } from "../util/local-storage.util";
-
-const Candidates = [
-  { name: "Candidate Name", programme: "Candidate Programme", id: 1 },
-  { name: "Candidate Name", programme: "Candidate Programme", id: 2 },
-  { name: "Candidate Name", programme: "Candidate Programme", id: 3 },
-  { name: "Candidate Name", programme: "Candidate Programme", id: 4 },
-];
 
 export default function VotingScreen({ logout }) {
   const { electionId } = useParams();
 
   const [candidates, setCandidates] = useState([]);
   const [offices, setOffices] = useState([]);
+  const [voterId, setVoterId] = useState();
 
   const [screenLoading, setScreenLoading] = useState([]);
+  const [voting, setVoting] = useState(false);
+
+  const [results, setResults] = useState([]);
+
+  const [voteResults, setVoteResults] = useState([]);
 
   const navigate = useNavigate();
+
+  function updateResults(newVal) {
+    setResults((prev) => [...prev, newVal]);
+  }
+
+  function submitVotes() {
+    setVoting(true);
+    results.map((result) => {
+      const selection = candidates.filter(
+        (candidate) => candidate.name === result
+      );
+      // console.log("Selection: ", selection);
+      const selected = selection.pop();
+
+      const body = {
+        candidate_id: selected.id,
+        election_id: selected.election_id,
+        office_id: selected.office_id,
+        voter_id: voterId,
+      };
+      setVoteResults((prev) => [...prev, body]);
+    });
+    castVotes();
+  }
+
+  function castVotes() {
+    const voter_json = getLocalStorage("VOTER");
+    const voterObj = JSON.parse(voter_json);
+
+    voteResults.map(async (vR) => {
+      const response = await voterCastVotes(
+        voterObj.token,
+        voterObj.voterId,
+        vR
+      );
+    });
+    setVoting(false);
+  }
 
   useEffect(() => {
     async function fetchCandidates() {
@@ -48,6 +88,7 @@ export default function VotingScreen({ logout }) {
         voterObj.token,
         electionId
       );
+      setVoterId(voterObj.voterId);
       if (candidates) {
         setCandidates(candidates.candidates);
         getOffices(candidates.candidates);
@@ -122,11 +163,34 @@ export default function VotingScreen({ logout }) {
                 />
               </Center>
             ) : (
-              <Box w="full">
-                {offices.map((office) => (
-                  <ElectionOffice office={office} candidates={candidates} />
-                ))}
-              </Box>
+              <>
+                <Box w="full">
+                  {offices.map((office) => (
+                    <ElectionOffice
+                      office={office}
+                      candidates={candidates}
+                      updateResults={updateResults}
+                    />
+                  ))}
+                </Box>
+                <Box>
+                  <Button
+                    bgColor="CelticBlue"
+                    onClick={submitVotes}
+                    textColor="white"
+                    gap={5}
+                  >
+                    {voting && (
+                      <CircularProgress
+                        isIndeterminate
+                        color="white"
+                        size="8"
+                      />
+                    )}
+                    SUBMIT VOTE
+                  </Button>
+                </Box>
+              </>
             )}
           </Box>
         </Box>
@@ -135,11 +199,14 @@ export default function VotingScreen({ logout }) {
   );
 }
 
-function ElectionOffice({ office, candidates }) {
+function ElectionOffice({ office, candidates, updateResults }) {
   const { getRootProps, getRadioProps, value } = useRadioGroup({
     name: "candidates",
     defaultValue: 1,
-    onChange: (value) => console.log(value),
+    onChange: (value) => {
+      console.log(value);
+      updateResults(value);
+    },
   });
 
   const group = getRootProps();
