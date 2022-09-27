@@ -48,7 +48,7 @@ export default function VotingScreen({ logout }) {
       }
     }
 
-    // fetchCandidates();
+    fetchCandidates();
   }, []);
 
   return (
@@ -104,22 +104,7 @@ export default function VotingScreen({ logout }) {
                 <ElectionCandidateCard />
               </Box>
             </Box>
-            <Box>
-              <Heading fontWeight="normal" fontSize="2xl">
-                Vice President
-              </Heading>
-              <Box display="flex" flexDir="row" gap={10} pt={3} flexWrap="wrap">
-                <Example />
-              </Box>
-            </Box>
-            {/* <Box>
-              <Heading fontWeight="normal" fontSize="2xl">
-                Financial Secretary
-              </Heading>
-              <Box display="flex" flexDir="row" gap={10} pt={3} flexWrap="wrap">
-                <CustomExample />
-              </Box>
-            </Box> */}
+
             <Button
               color="white"
               bgColor="CelticBlue"
