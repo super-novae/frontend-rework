@@ -31,6 +31,9 @@ export default function VotingScreen({ logout }) {
   const { electionId } = useParams;
 
   const [candidates, setCandidates] = useState([]);
+  const [offices, setOffices] = useState([]);
+
+  const [screenLoading, setScreenLoading] = useState([]);
 
   const navigate = useNavigate();
 
