@@ -93,7 +93,7 @@ function LoginForm({ navigate, login }) {
         </Box>
         <Button
           w="full"
-          bgColor="CelticBlue"
+          className="voter-background"
           mt={10}
           color="white"
           onClick={loginEvent}
