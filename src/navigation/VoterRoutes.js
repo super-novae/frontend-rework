@@ -7,6 +7,7 @@ import {
   VoterLogin,
   VotingScreen,
   ElectionResults,
+  VoterBufferScreen,
 } from "../pages";
 
 import {
@@ -62,6 +63,10 @@ export default function VoterRoutes() {
             <Route index element={<VoterHome logout={handleVoterLogout} />} />
             <Route
               path="elections/:electionId"
+              element={<VoterBufferScreen logout={handleVoterLogout} />}
+            />
+            <Route
+              path="elections/:electionId/vote"
               element={<VotingScreen logout={handleVoterLogout} />}
             />
             <Route

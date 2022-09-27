@@ -139,14 +139,6 @@ export default function AdminElectionOffices({ logout }) {
             <Heading fontWeight="500" fontSize="3xl">
               ACES Elections
             </Heading>
-            <Button
-              bgColor="DarkPurple"
-              color="white"
-              size="lg"
-              fontWeight="normal"
-            >
-              VIEW RESULTS
-            </Button>
           </Box>
           <Heading fontWeight="400" fontSize="2xl" my={5}>
             Offices

@@ -128,6 +128,7 @@ export default function VoterHome({ logout }) {
                 fontWeight="500"
                 px={2}
                 size="lg"
+                onClick={() => {}}
               >
                 View Results
               </Button>
