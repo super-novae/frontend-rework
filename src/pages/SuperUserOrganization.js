@@ -56,6 +56,8 @@ export default function SuperUserOrganization({ logout }) {
       setOrgDetails(org);
       if (org.administrator_id) {
         getAdminByIdHandler(org.administrator_id);
+      } else if (org.administrator_id === null){
+        setScreenLoading(false);
       }
     }
 
